@@ -165,26 +165,50 @@ void main(List<String> arguments) {
     print(AppConstants.kFailCreateProject(result.stderr));
   }
 
-  for (String module in modules) {
-    result = Process.runSync(
+  ProcessResult createModuleCommand(String path) {
+    return Process.runSync(
       AppConstants.kFlutter,
       [
         AppConstants.kCreate,
         AppConstants.kTemplate,
         AppConstants.kPackage,
-        '$path/$projectName/$module',
+        path,
       ],
     );
+  }
 
-    // Print the output of the Flutter create command
-    print(result.stdout);
+  final List<String> mainModules = [
+    AppConstants.kCore,
+    AppConstants.kCoreUi,
+    AppConstants.kData,
+    AppConstants.kDomain,
+    AppConstants.kFeatures,
+    AppConstants.kNavigation,
+  ];
 
-    // Print an error message if the Flutter create command failed
-    if (result.exitCode != 0) {
-      print(AppConstants.kFailCreateModule(module, result.stderr));
-      return;
+  void createModules(
+    List<String> modules, {
+    bool isFeatureModule = false,
+  }) {
+    final String basePath = isFeatureModule
+        ? '$path/$projectName/${AppConstants.kFeatures}'
+        : '$path/$projectName';
+    for (String module in modules) {
+      final result = createModuleCommand('$basePath/$module');
+
+      // Print the output of the Flutter create command
+      print(result.stdout);
+
+      // Print an error message if the Flutter create command failed
+      if (result.exitCode != 0) {
+        print(AppConstants.kFailCreateModule(module, result.stderr));
+        return;
+      }
     }
   }
+
+  createModules(mainModules);
+  createModules(modules, isFeatureModule: true);
 
   print(AppConstants.kCreateModulesSuccess);
 }
