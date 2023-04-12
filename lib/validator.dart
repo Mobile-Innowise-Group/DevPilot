@@ -3,6 +3,7 @@ import 'dart:io';
 class Validator {
   static RegExp fullStringRegex = RegExp(r'^[a-zA-Z]+$');
   static RegExp snakeCaseRegex = RegExp(r'^[a-z]+(_[a-z]+)*$');
+
   static bool kIsValidProjectName(String? name) {
     return name == null
         ? false

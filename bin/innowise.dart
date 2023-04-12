@@ -4,6 +4,7 @@ import 'package:innowise/app_constants.dart';
 import 'package:innowise/validator.dart';
 
 void main(List<String> arguments) {
+  //PROJECT NAME
   stdout.write(AppConstants.kEnterProjectName);
   String? projectName = stdin.readLineSync()?.trim();
 
@@ -11,17 +12,35 @@ void main(List<String> arguments) {
     stdout.write(AppConstants.kEnterValidProjectName);
     projectName = stdin.readLineSync()?.trim();
   }
-  stdout.write(AppConstants.kEnterPath);
-  String? path = stdin.readLineSync()?.trim();
 
-  while (!Validator.kIsValidPath(path)) {
-    stdout.write(AppConstants.kInvalidPath);
-    path = stdin.readLineSync()?.trim();
+  //PATH
+
+  stdout.write(AppConstants.kNeedSpecifyPath);
+  String? specifyPath = stdin.readLineSync()?.trim();
+  String? path = Directory.current.path;
+  while (specifyPath != AppConstants.kYes && specifyPath != AppConstants.kNo) {
+    stdout.write(AppConstants.kInvalidYesOrNo);
+    specifyPath = stdin.readLineSync()?.trim();
   }
+
+  if (specifyPath == AppConstants.kYes) {
+    stdout.write(AppConstants.kEnterPath);
+    path = stdin.readLineSync()?.trim();
+
+    while (!Validator.kIsValidPath(path)) {
+      stdout.write(AppConstants.kInvalidPath);
+      path = stdin.readLineSync()?.trim();
+    }
+  }
+  // FEATURE
   stdout.write(AppConstants.kAddFeature);
   String? addFeatures = stdin.readLineSync()?.trim().toLowerCase();
-
   List<String> modules = [];
+
+  while (addFeatures != AppConstants.kYes && addFeatures != AppConstants.kNo) {
+    stdout.write(AppConstants.kAddFeature);
+    addFeatures = stdin.readLineSync()?.trim().toLowerCase();
+  }
 
   if (addFeatures == AppConstants.kYes) {
     stdout.write(AppConstants.kEnterFeatures);
@@ -35,6 +54,7 @@ void main(List<String> arguments) {
     modules = featuresInput!.split(',').map((e) => e.trim()).toList();
   }
 
+  //DIO
   stdout.write(AppConstants.kWillYouUseDio);
   String? dioInput = stdin.readLineSync()?.trim().toLowerCase();
 
@@ -42,21 +62,20 @@ void main(List<String> arguments) {
     stdout.write(AppConstants.kWillYouUseDio);
     dioInput = stdin.readLineSync()?.trim().toLowerCase();
   }
-
   bool isDioNeeded = dioInput == AppConstants.kYes;
 
+  //FLAVORS
   stdout.write(AppConstants.kWillYouUseFlavours);
   String? flavorsInput = stdin.readLineSync()?.trim().toLowerCase();
+  List<String> flavors = [];
 
   while (
       flavorsInput != AppConstants.kYes && flavorsInput != AppConstants.kNo) {
     stdout.write(AppConstants.kInvalidYesOrNo);
     flavorsInput = stdin.readLineSync()?.trim().toLowerCase();
   }
-
   bool isFlavorsNeeded = flavorsInput == AppConstants.kYes;
 
-  List<String> flavors = [];
   if (isFlavorsNeeded) {
     stdout.write(AppConstants.kEnterFlavours);
     String? flavorsInput = stdin.readLineSync()?.trim();
@@ -69,6 +88,7 @@ void main(List<String> arguments) {
     flavors = flavorsInput!.split(',').map((flavor) => flavor.trim()).toList();
   }
 
+  //PACKAGES FOR SELECTED MODULES
   bool isPackagesNeeded = false;
   List<String> packageModules = [];
   Map<String, List<String>> packages = {};
@@ -78,7 +98,6 @@ void main(List<String> arguments) {
   if (addPackages?.toLowerCase() == AppConstants.kYes) {
     isPackagesNeeded = true;
   }
-
   while (isPackagesNeeded) {
     stdout.write(AppConstants.kSelectModule(modulesString));
     String? selectedModule = stdin.readLineSync()?.trim().toLowerCase();
@@ -128,20 +147,44 @@ void main(List<String> arguments) {
     }
   }
 
+  //CREATE PROJECT WITH A GIVEN PATH AND PROJECT NAME
   ProcessResult result = Process.runSync(
-    'flutter',
+    AppConstants.kFlutter,
     [
-      'create',
-      '--no-pub',
-      '--org',
-      'com.example',
-      '--project-name',
+      AppConstants.kCreate,
+      AppConstants.kNoPub,
+      AppConstants.kOrg,
+      AppConstants.kComExample,
+      AppConstants.kProjectName,
       projectName!,
-      path!
+      '$path/$projectName',
     ],
   );
 
   if (result.exitCode != 0) {
-    print('Failed to create Flutter project: ${result.stderr}');
+    print(AppConstants.kFailCreateProject(result.stderr));
   }
+
+  for (String module in modules) {
+    result = Process.runSync(
+      AppConstants.kFlutter,
+      [
+        AppConstants.kCreate,
+        AppConstants.kTemplate,
+        AppConstants.kPackage,
+        '$path/$projectName/$module',
+      ],
+    );
+
+    // Print the output of the Flutter create command
+    print(result.stdout);
+
+    // Print an error message if the Flutter create command failed
+    if (result.exitCode != 0) {
+      print(AppConstants.kFailCreateModule(module, result.stderr));
+      return;
+    }
+  }
+
+  print(AppConstants.kCreateModulesSuccess);
 }
