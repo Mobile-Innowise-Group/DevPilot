@@ -1,100 +1,89 @@
 import 'dart:io';
 
 import 'package:innowise/app_constants.dart';
+import 'package:innowise/input.dart';
 import 'package:innowise/validator.dart';
 
 void main(List<String> arguments) {
-  //PROJECT NAME
-  stdout.write(AppConstants.kEnterProjectName);
-  String? projectName = stdin.readLineSync()?.trim();
+  String? path = Directory.current.path;
+  List<String> featureModules = [];
+  List<String> flavors = [];
+  bool isPackagesNeeded = false;
+  List<String> packageModules = [];
+  Map<String, List<String>> packages = {};
 
-  while (!Validator.kIsValidProjectName(projectName)) {
-    stdout.write(AppConstants.kEnterValidProjectName);
-    projectName = stdin.readLineSync()?.trim();
-  }
+  //PROJECT NAME
+  String? projectName = Input.getValidatedInput(
+    stdoutMessage: AppConstants.kEnterProjectName,
+    errorMessage: AppConstants.kEnterValidProjectName,
+    functionValidator: Validator.kIsValidProjectName,
+  );
 
   //PATH
-
-  stdout.write(AppConstants.kNeedSpecifyPath);
-  String? specifyPath = stdin.readLineSync()?.trim();
-  String? path = Directory.current.path;
-  while (specifyPath != AppConstants.kYes && specifyPath != AppConstants.kNo) {
-    stdout.write(AppConstants.kInvalidYesOrNo);
-    specifyPath = stdin.readLineSync()?.trim();
-  }
+  String? specifyPath = Input.getValidatedInput(
+    stdoutMessage: AppConstants.kNeedSpecifyPath,
+    errorMessage: AppConstants.kInvalidYesOrNo,
+    isPositiveResponse: true,
+  );
 
   if (specifyPath == AppConstants.kYes) {
-    stdout.write(AppConstants.kEnterPath);
-    path = stdin.readLineSync()?.trim();
-
-    while (!Validator.kIsValidPath(path)) {
-      stdout.write(AppConstants.kInvalidPath);
-      path = stdin.readLineSync()?.trim();
-    }
+    path = Input.getValidatedInput(
+      stdoutMessage: AppConstants.kEnterPath,
+      errorMessage: AppConstants.kInvalidPath,
+      functionValidator: Validator.kIsValidPath,
+    );
   }
   // FEATURE
-  stdout.write(AppConstants.kAddFeature);
-  String? addFeatures = stdin.readLineSync()?.trim().toLowerCase();
-  List<String> modules = [];
-
-  while (addFeatures != AppConstants.kYes && addFeatures != AppConstants.kNo) {
-    stdout.write(AppConstants.kAddFeature);
-    addFeatures = stdin.readLineSync()?.trim().toLowerCase();
-  }
+  String? addFeatures = Input.getValidatedInput(
+    stdoutMessage: AppConstants.kAddFeature,
+    errorMessage: AppConstants.kAddFeature,
+    isPositiveResponse: true,
+  );
 
   if (addFeatures == AppConstants.kYes) {
-    stdout.write(AppConstants.kEnterFeatures);
-    String? featuresInput = stdin.readLineSync()?.trim();
-
-    while (!Validator.kIsValidListString(featuresInput)) {
-      stdout.write(AppConstants.kInvalidFeatureName);
-      featuresInput = stdin.readLineSync()?.trim();
-    }
-
-    modules = featuresInput!.split(',').map((e) => e.trim()).toList();
+    String? featuresInput = Input.getValidatedInput(
+      stdoutMessage: AppConstants.kEnterFeatures,
+      errorMessage: AppConstants.kInvalidFeatureName,
+      functionValidator: Validator.kIsValidListString,
+    );
+    featureModules = featuresInput!.split(',').map((e) => e.trim()).toList();
   }
 
   //DIO
-  stdout.write(AppConstants.kWillYouUseDio);
-  String? dioInput = stdin.readLineSync()?.trim().toLowerCase();
+  String? dioInput = Input.getValidatedInput(
+    stdoutMessage: AppConstants.kWillYouUseDio,
+    errorMessage: AppConstants.kWillYouUseDio,
+    isPositiveResponse: true,
+  );
 
-  while (dioInput != AppConstants.kYes && dioInput != AppConstants.kNo) {
-    stdout.write(AppConstants.kWillYouUseDio);
-    dioInput = stdin.readLineSync()?.trim().toLowerCase();
-  }
   bool isDioNeeded = dioInput == AppConstants.kYes;
 
   //FLAVORS
-  stdout.write(AppConstants.kWillYouUseFlavours);
-  String? flavorsInput = stdin.readLineSync()?.trim().toLowerCase();
-  List<String> flavors = [];
+  String? flavorsInput = Input.getValidatedInput(
+    stdoutMessage: AppConstants.kWillYouUseFlavours,
+    errorMessage: AppConstants.kInvalidYesOrNo,
+    isPositiveResponse: true,
+  );
 
-  while (
-      flavorsInput != AppConstants.kYes && flavorsInput != AppConstants.kNo) {
-    stdout.write(AppConstants.kInvalidYesOrNo);
-    flavorsInput = stdin.readLineSync()?.trim().toLowerCase();
-  }
   bool isFlavorsNeeded = flavorsInput == AppConstants.kYes;
 
   if (isFlavorsNeeded) {
-    stdout.write(AppConstants.kEnterFlavours);
-    String? flavorsInput = stdin.readLineSync()?.trim();
-
-    while (!Validator.kIsValidFlavorsInput(flavorsInput)) {
-      stdout.write(AppConstants.kInvalidFlavours);
-      flavorsInput = stdin.readLineSync()?.trim();
-    }
-
+    String? flavorsInput = Input.getValidatedInput(
+      stdoutMessage: AppConstants.kEnterFlavours,
+      errorMessage: AppConstants.kInvalidFlavours,
+      functionValidator: Validator.kIsValidFlavorsInput,
+    );
     flavors = flavorsInput!.split(',').map((flavor) => flavor.trim()).toList();
   }
 
   //PACKAGES FOR SELECTED MODULES
-  bool isPackagesNeeded = false;
-  List<String> packageModules = [];
-  Map<String, List<String>> packages = {};
-  String modulesString = modules.join(', ');
-  stdout.write(AppConstants.kAddPackages(modulesString));
-  String? addPackages = stdin.readLineSync()?.trim();
+  String modulesString = featureModules.join(', ');
+  String? addPackages = Input.getValidatedInput(
+    stdoutMessage: AppConstants.kAddPackages(modulesString),
+    errorMessage: AppConstants.kInvalidYesOrNo,
+    isPositiveResponse: true,
+  );
+
   if (addPackages?.toLowerCase() == AppConstants.kYes) {
     isPackagesNeeded = true;
   }
@@ -182,7 +171,6 @@ void main(List<String> arguments) {
     AppConstants.kCoreUi,
     AppConstants.kData,
     AppConstants.kDomain,
-    AppConstants.kFeatures,
     AppConstants.kNavigation,
   ];
 
@@ -208,7 +196,7 @@ void main(List<String> arguments) {
   }
 
   createModules(mainModules);
-  createModules(modules, isFeatureModule: true);
+  createModules(featureModules, isFeatureModule: true);
 
   print(AppConstants.kCreateModulesSuccess);
 }

@@ -28,11 +28,11 @@ class AppConstants {
       'Invalid input. Please enter only full strings separated by commas (Please Note that line can\'t endup with comma): ';
 
   static String kAddPackages(String modulesString) {
-    return 'Do you want to add any packages to any of the following modules (core, core_ui, data, domain, features, $modulesString navigation)? (yes/no): ';
+    return 'Do you want to add any packages to any of the following modules (core, core_ui, data, domain, navigation, features, $modulesString )? (yes/no): ';
   }
 
   static String kSelectModule(String modulesString) {
-    return 'Please select a module from the following list to add packages to (core, core_ui, data, domain, features, $modulesString navigation) (Please Note that line can\'t endup with comma): ';
+    return 'Please select a module from the following list to add packages to (core, core_ui, data, domain, navigation, features, $modulesString ) (Please Note that line can\'t endup with comma): ';
   }
 
   static String kAddPackageSelectModule(String? selectedModule) {
