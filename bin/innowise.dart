@@ -1,16 +1,29 @@
 import 'dart:io';
 
 import 'package:innowise/app_constants.dart';
+import 'package:innowise/directory_service.dart';
 import 'package:innowise/input.dart';
 import 'package:innowise/validator.dart';
 
 void main(List<String> arguments) {
+
+  String sourcePath = '${Directory.current.path}/lib/example';
+  String destinationPath = '/users/kemal/desktop/kemal';
+  DirectoryService.copyDirectory(sourcePath, destinationPath);
   String? path = Directory.current.path;
   List<String> featureModules = [];
   List<String> flavors = [];
   bool isPackagesNeeded = false;
   List<String> packageModules = [];
   Map<String, List<String>> packages = {};
+
+  final List<String> mainModules = [
+    AppConstants.kCore,
+    AppConstants.kCoreUi,
+    AppConstants.kData,
+    AppConstants.kDomain,
+    AppConstants.kNavigation,
+  ];
 
   //PROJECT NAME
   String? projectName = Input.getValidatedInput(
@@ -165,14 +178,6 @@ void main(List<String> arguments) {
       ],
     );
   }
-
-  final List<String> mainModules = [
-    AppConstants.kCore,
-    AppConstants.kCoreUi,
-    AppConstants.kData,
-    AppConstants.kDomain,
-    AppConstants.kNavigation,
-  ];
 
   void createModules(
     List<String> modules, {
