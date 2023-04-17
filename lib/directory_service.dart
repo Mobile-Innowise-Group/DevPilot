@@ -1,10 +1,17 @@
 import 'dart:io';
 
+import 'package:innowise/app_constants.dart';
+import 'package:innowise/file_service.dart';
+
 class DirectoryService {
-  static void copyDirectory(String sourcePath, String destinationPath) {
+  static void copy({
+    required String sourcePath,
+    required String destinationPath,
+    bool isFeature = false,
+  }) async {
     Directory sourceDirectory = Directory(sourcePath);
     if (!sourceDirectory.existsSync()) {
-      print('Source folder does not exist');
+      print(AppConstants.kInvalidSourceFolder);
       return;
     }
     Directory destinationDirectory = Directory(destinationPath);
@@ -24,9 +31,34 @@ class DirectoryService {
       if (entity is Directory) {
         Directory newDirectory = Directory(newPath);
         newDirectory.createSync();
-        copyDirectory(entity.path, newDirectory.path);
+        copy(sourcePath: entity.path, destinationPath: newDirectory.path);
       } else if (entity is File) {
         entity.copySync(newPath);
+        if (isFeature) {
+          String featureName = destinationDirectory.path.split('/').last;
+          await FileService.updateFileContent(
+            oldString: AppConstants.kFeaturePlug,
+            newString: AppConstants.kFeaturePlugReplaceWith(featureName),
+            filePath: newPath,
+          );
+        }
+      }
+    }
+  }
+
+  static void deleteFile({
+    required String directoryPath,
+    required String fileName,
+    bool deleteEmptyDir = false,
+  }) {
+    final directory = Directory(directoryPath);
+    final file = File('${directory.path}/$fileName');
+
+    if (file.existsSync()) {
+      file.deleteSync();
+
+      if (deleteEmptyDir && directory.listSync().isEmpty) {
+        directory.deleteSync();
       }
     }
   }

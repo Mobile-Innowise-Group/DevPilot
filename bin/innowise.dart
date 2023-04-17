@@ -6,11 +6,7 @@ import 'package:innowise/input.dart';
 import 'package:innowise/validator.dart';
 
 void main(List<String> arguments) {
-
-  String sourcePath = '${Directory.current.path}/lib/example';
-  String destinationPath = '/users/kemal/desktop/kemal';
-  DirectoryService.copyDirectory(sourcePath, destinationPath);
-  String? path = Directory.current.path;
+  String? path = AppConstants.kCurrentPath;
   List<String> featureModules = [];
   List<String> flavors = [];
   bool isPackagesNeeded = false;
@@ -167,41 +163,25 @@ void main(List<String> arguments) {
     print(AppConstants.kFailCreateProject(result.stderr));
   }
 
-  ProcessResult createModuleCommand(String path) {
-    return Process.runSync(
-      AppConstants.kFlutter,
-      [
-        AppConstants.kCreate,
-        AppConstants.kTemplate,
-        AppConstants.kPackage,
-        path,
-      ],
+  for (String module in mainModules) {
+    DirectoryService.copy(
+      sourcePath: '${AppConstants.kTemplates}/$module',
+      destinationPath: '$path/$projectName/$module',
     );
   }
 
-  void createModules(
-    List<String> modules, {
-    bool isFeatureModule = false,
-  }) {
-    final String basePath = isFeatureModule
-        ? '$path/$projectName/${AppConstants.kFeatures}'
-        : '$path/$projectName';
-    for (String module in modules) {
-      final result = createModuleCommand('$basePath/$module');
-
-      // Print the output of the Flutter create command
-      print(result.stdout);
-
-      // Print an error message if the Flutter create command failed
-      if (result.exitCode != 0) {
-        print(AppConstants.kFailCreateModule(module, result.stderr));
-        return;
-      }
-    }
+  for (String feature in featureModules) {
+    DirectoryService.copy(
+      sourcePath: '${AppConstants.kTemplates}/${AppConstants.kFeature}',
+      destinationPath: '$path/$projectName/${AppConstants.kFeatures}/$feature',
+      isFeature: true,
+    );
   }
 
-  createModules(mainModules);
-  createModules(featureModules, isFeatureModule: true);
+  DirectoryService.copy(
+    sourcePath: '${AppConstants.kTemplates}/${AppConstants.kPrebuild}',
+    destinationPath: '$path/$projectName/',
+  );
 
-  print(AppConstants.kCreateModulesSuccess);
+  print(AppConstants.kCreateAppSuccess);
 }

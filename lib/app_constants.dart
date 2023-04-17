@@ -1,3 +1,6 @@
+import 'dart:io';
+
+
 class AppConstants {
   //STRING CONSTANTS
   static const String kEnterProjectName = 'Enter a project name: ';
@@ -47,10 +50,6 @@ class AppConstants {
     return 'Failed to create Flutter project: $error';
   }
 
-  static String kFailCreateModule(String? module, String? error) {
-    return 'Failed to create module $module: $error';
-  }
-
   static const String kEnterFeatureForPackage =
       'Please enter the feature name for which you want to add packages: ';
   static const String kInvalidFeatureForPackage =
@@ -59,14 +58,15 @@ class AppConstants {
       'Invalid module name entered. Please try again.\n';
   static const String kAddPackageOtherModule =
       'Do you want to add packages to any other module? (yes/no): ';
-  static const String kCreateModulesSuccess =
-      'All modules created successfully!';
+  static const String kCreateAppSuccess =
+      'App created successfully!';
 
   static const String kCore = 'core';
   static const String kCoreUi = 'core_ui';
   static const String kData = 'data';
   static const String kDomain = 'domain';
   static const String kFeatures = 'features';
+  static const String kFeature = 'feature';
   static const String kNavigation = 'navigation';
 
   static const String kFlutter = 'flutter';
@@ -75,6 +75,14 @@ class AppConstants {
   static const String kOrg = '--org';
   static const String kComExample = 'com.example';
   static const String kProjectName = '--project-name';
-  static const String kTemplate = '--template';
-  static const String kPackage = 'package';
+
+  static String kCurrentPath = Directory.current.path;
+  static String kTemplates = '$kCurrentPath/templates';
+  static const String kPrebuild = 'prebuild';
+
+  static const String kFeaturePlug = 'name: plug';
+  static String kFeaturePlugReplaceWith(String? featureName) {
+    return 'name: $featureName';
+  }
+  static const String kInvalidSourceFolder = 'Source folder does not exist';
 }
