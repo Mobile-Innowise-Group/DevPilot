@@ -16,6 +16,8 @@ dependencies:
     path: ../domain
   navigation:
     path: ../navigation
+  flutter_svg: ^2.0.5
+  flutter_bloc: ^8.1.1
 
 
 dev_dependencies:

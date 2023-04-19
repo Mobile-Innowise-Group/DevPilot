@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 class AppConstants {
   //STRING CONSTANTS
   static const String kEnterProjectName = 'Enter a project name: ';
@@ -31,11 +30,15 @@ class AppConstants {
       'Invalid input. Please enter only full strings separated by commas (Please Note that line can\'t endup with comma): ';
 
   static String kAddPackages(String modulesString) {
-    return 'Do you want to add any packages to any of the following modules (core, core_ui, data, domain, navigation, features, $modulesString )? (yes/no): ';
+    return 'Do you want to add any packages to any of the following modules (core, core_ui, data, domain, navigation, features ${modulesString.isEmpty ? '' : [
+        modulesString
+      ]})? (yes/no): ';
   }
 
   static String kSelectModule(String modulesString) {
-    return 'Please select a module from the following list to add packages to (core, core_ui, data, domain, navigation, features, $modulesString ) (Please Note that line can\'t endup with comma): ';
+    return 'Please select a module from the following list to add packages to (core, core_ui, data, domain, navigation, features ${modulesString.isEmpty ? '' : [
+        modulesString
+      ]} )\n(Please Note that line can\'t endup with comma. If you want to add package to any features module then select features module first): ';
   }
 
   static String kAddPackageSelectModule(String? selectedModule) {
@@ -58,8 +61,7 @@ class AppConstants {
       'Invalid module name entered. Please try again.\n';
   static const String kAddPackageOtherModule =
       'Do you want to add packages to any other module? (yes/no): ';
-  static const String kCreateAppSuccess =
-      'App created successfully!';
+  static const String kCreateAppSuccess = 'App created successfully!';
 
   static const String kCore = 'core';
   static const String kCoreUi = 'core_ui';
@@ -81,8 +83,81 @@ class AppConstants {
   static const String kPrebuild = 'prebuild';
 
   static const String kFeaturePlug = 'name: plug';
+
   static String kFeaturePlugReplaceWith(String? featureName) {
     return 'name: $featureName';
   }
+
   static const String kInvalidSourceFolder = 'Source folder does not exist';
+
+  static String kFlavourContent(String projectName, String flavor) {
+    return '''
+import 'package:core/core.dart';
+import 'package:$projectName/main_common.dart';
+
+void main() {
+  mainCommon(Flavor.$flavor);
+}
+    ''';
+  }
+
+  static const String kSdkFlutter = 'sdk: flutter';
+
+  static const String kAppConfigPath = 'core/lib/config/app_config.dart';
+
+  static const String kFlavorEnum = 'enum Flavor {';
+
+  static const String kFlavorSwitch = 'switch (flavor) {';
+
+  static  String kFlavorCase(String flavor){
+    return '''
+    case Flavor.$flavor:
+        baseUrl = '';
+        webSocketUrl = '';
+        break;
+    ''';
+  }
+
+  static String kMainPubspecDependencies = '''  
+  domain:
+    path: ./domain
+  core:
+    path: ./core
+  core_ui:
+    path: ./core_ui
+  data:
+    path: ./data
+  navigation:
+    path: ./navigation
+    ''';
+
+  static const String kMainCommonContent = '''
+import 'package:core/core.dart';
+import 'package:flutter/material.dart';
+
+Future<void> mainCommon(Flavor flavor) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  _setupDI(flavor);
+
+  runApp(const App());
+}
+
+void _setupDI(Flavor flavor) {
+  appLocator.pushNewScope(
+    scopeName: unauthScope,
+    init: (_) {
+      AppDI.initDependencies(flavor);
+    },
+  );
+}
+
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+  ''';
 }

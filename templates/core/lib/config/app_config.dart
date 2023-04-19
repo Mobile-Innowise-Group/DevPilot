@@ -1,6 +1,5 @@
 enum Flavor {
   dev,
-  prod,
 }
 
 class AppConfig {
@@ -19,10 +18,6 @@ class AppConfig {
     String webSocketUrl;
     switch (flavor) {
       case Flavor.dev:
-        baseUrl = '';
-        webSocketUrl = '';
-        break;
-      case Flavor.prod:
         baseUrl = '';
         webSocketUrl = '';
         break;

@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:innowise/app_constants.dart';
 import 'package:innowise/directory_service.dart';
+import 'package:innowise/file_service.dart';
 import 'package:innowise/input.dart';
+import 'package:innowise/script_service.dart';
 import 'package:innowise/validator.dart';
 
-void main(List<String> arguments) {
+void main(List<String> arguments) async {
   String? path = AppConstants.kCurrentPath;
   List<String> featureModules = [];
   List<String> flavors = [];
@@ -138,9 +140,12 @@ void main(List<String> arguments) {
         break;
     }
 
-    stdout.write(AppConstants.kAddPackageOtherModule);
-    String? addMorePackages = stdin.readLineSync()?.trim();
-    if (addMorePackages?.toLowerCase() != AppConstants.kYes) {
+    String? addMorePackages = Input.getValidatedInput(
+      stdoutMessage: AppConstants.kAddPackageOtherModule,
+      errorMessage: AppConstants.kInvalidYesOrNo,
+      isPositiveResponse: true,
+    );
+    if (addMorePackages?.toLowerCase() == AppConstants.kNo) {
       isPackagesNeeded = false;
     }
   }
@@ -163,25 +168,97 @@ void main(List<String> arguments) {
     print(AppConstants.kFailCreateProject(result.stderr));
   }
 
+  await FileService.appendToFile(AppConstants.kSdkFlutter,
+      AppConstants.kMainPubspecDependencies, '$path/$projectName/pubspec.yaml');
+
   for (String module in mainModules) {
-    DirectoryService.copy(
+    final String modulePath = '$path/$projectName/$module';
+    await DirectoryService.copy(
       sourcePath: '${AppConstants.kTemplates}/$module',
-      destinationPath: '$path/$projectName/$module',
+      destinationPath: modulePath,
     );
+  }
+  for (String module in mainModules) {
+    final String modulePath = '$path/$projectName/$module';
+
+    if (packages[module] != null) {
+      await ScriptService.addPackagesToModules(
+        module,
+        packages[module]!,
+        '$path/$projectName',
+      );
+    }
+    await ScriptService.flutterClean(modulePath);
+    await ScriptService.flutterPubGet(modulePath);
   }
 
   for (String feature in featureModules) {
-    DirectoryService.copy(
+    final String featureDestination =
+        '$path/$projectName/${AppConstants.kFeatures}/$feature';
+    await DirectoryService.copy(
       sourcePath: '${AppConstants.kTemplates}/${AppConstants.kFeature}',
-      destinationPath: '$path/$projectName/${AppConstants.kFeatures}/$feature',
+      destinationPath: featureDestination,
       isFeature: true,
     );
+    if (packages[feature] != null) {
+      await ScriptService.addPackagesToModules(
+        feature,
+        packages[feature]!,
+        '$path/$projectName/${AppConstants.kFeatures}',
+      );
+    }
+    await ScriptService.flutterClean(featureDestination);
+    await ScriptService.flutterPubGet(featureDestination);
   }
 
   DirectoryService.copy(
     sourcePath: '${AppConstants.kTemplates}/${AppConstants.kPrebuild}',
     destinationPath: '$path/$projectName/',
   );
+
+  if (flavors.isNotEmpty) {
+    final String libPath = '$path/$projectName/lib';
+    final String appConfigPath =
+        '$path/$projectName/${AppConstants.kAppConfigPath}';
+    DirectoryService.deleteFile(
+      directoryPath: libPath,
+      fileName: 'main.dart',
+    );
+
+    for (final flavor in flavors) {
+      if(flavor != 'dev'){
+        await FileService.appendToFile(
+          AppConstants.kFlavorEnum,
+          '$flavor,',
+          appConfigPath,
+        );
+
+        await FileService.appendToFile(
+          AppConstants.kFlavorSwitch,
+          AppConstants.kFlavorCase(flavor),
+          appConfigPath,
+        );
+      }
+
+      final String fileName = 'main_$flavor.dart';
+      final File file = File('$libPath/$fileName');
+      file.writeAsStringSync(
+        AppConstants.kFlavourContent(projectName, flavor),
+      );
+    }
+
+    final String fileName = 'main_common.dart';
+    final File file = File('$libPath/$fileName');
+    file.writeAsStringSync(AppConstants.kMainCommonContent);
+  }
+
+  DirectoryService.deleteFile(
+    directoryPath: '$path/$projectName/test',
+    fileName: 'widget_test.dart',
+  );
+
+  await ScriptService.flutterClean('$path/$projectName');
+  await ScriptService.flutterPubGet('$path/$projectName');
 
   print(AppConstants.kCreateAppSuccess);
 }

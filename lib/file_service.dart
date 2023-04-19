@@ -24,4 +24,20 @@ class FileService {
         oldIndex + oldString.length, '\n$newString');
     await file.writeAsString(newContent);
   }
+
+  static Future<void> runScript(String scriptName, String directoryPath) async {
+    final scriptPath = '$directoryPath/$scriptName';
+    final process = await Process.run(
+      'sh',
+      [scriptPath],
+      workingDirectory: directoryPath,
+    );
+
+    if (process.exitCode != 0) {
+      print('Error running script: ${process.stderr}');
+    } else {
+      print('Script output: ${process.stdout}');
+    }
+  }
+
 }
