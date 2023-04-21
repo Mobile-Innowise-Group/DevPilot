@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:dcli/dcli.dart';
+
 class FileService {
   static Future<void> updateFileContent({
     required String oldString,
@@ -18,7 +20,7 @@ class FileService {
     String content = await file.readAsString();
     final oldIndex = content.indexOf(oldString);
     if (oldIndex == -1) {
-      throw Exception('Could not find the old string in the file');
+      throw Exception(red('❌ Could not find the old string in the file'));
     }
     final newContent = content.replaceRange(oldIndex + oldString.length,
         oldIndex + oldString.length, '\n$newString');
@@ -34,9 +36,9 @@ class FileService {
     );
 
     if (process.exitCode != 0) {
-      print('Error running script: ${process.stderr}');
+      print(red('❌ Error running script: ${process.stderr}'));
     } else {
-      print('Script output: ${process.stdout}');
+      print(green('✅ Script output: ${process.stdout}'));
     }
   }
 

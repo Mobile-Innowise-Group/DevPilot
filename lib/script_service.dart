@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:dcli/dcli.dart';
+
 class ScriptService {
   static Future<void> flutterClean(String modulePath) async {
     final cleanProcess = await Process.run(
@@ -9,9 +11,9 @@ class ScriptService {
     );
     if (cleanProcess.exitCode != 0) {
       print(
-          'Error running flutter clean for $modulePath: ${cleanProcess.stderr}');
+          red('❌  Error running flutter clean for $modulePath: ${cleanProcess.stderr}'));
     } else {
-      print('Successfully ran flutter clean for $modulePath');
+      print(green('✅  Successfully ran flutter clean for $modulePath'));
     }
   }
 
@@ -19,10 +21,10 @@ class ScriptService {
     final pubGetProcess = await Process.run('flutter', ['pub', 'get'],
         workingDirectory: modulePath);
     if (pubGetProcess.exitCode != 0) {
-      print(
-          'Error running flutter pub get for $modulePath : ${pubGetProcess.stderr}');
+      print(red(
+          '❌  Error running flutter pub get for $modulePath : ${pubGetProcess.stderr}'));
     } else {
-      print('Successfully ran flutter pub get for $modulePath}');
+      print(green('✅  Successfully ran flutter pub get for $modulePath'));
     }
   }
 
@@ -40,10 +42,10 @@ class ScriptService {
       workingDirectory: modulePath,
     );
     if (processResult.exitCode == 0) {
-      print('Packages added to module $moduleName');
+      print(green('✅ Packages added to module $moduleName'));
     } else {
       print(
-        'Failed to add packages to module $moduleName: ${processResult.stderr}',
+        red('❌ Failed to add packages to module $moduleName: ${processResult.stderr}'),
       );
     }
   }

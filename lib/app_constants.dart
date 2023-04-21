@@ -38,7 +38,7 @@ class AppConstants {
   static String kSelectModule(String modulesString) {
     return 'Please select a module from the following list to add packages to (core, core_ui, data, domain, navigation, features ${modulesString.isEmpty ? '' : [
         modulesString
-      ]} )\n(Please Note that line can\'t endup with comma. If you want to add package to any features module then select features module first): ';
+      ]} ) : ';
   }
 
   static String kAddPackageSelectModule(String? selectedModule) {
@@ -109,7 +109,7 @@ void main() {
 
   static const String kFlavorSwitch = 'switch (flavor) {';
 
-  static  String kFlavorCase(String flavor){
+  static String kFlavorCase(String flavor) {
     return '''
     case Flavor.$flavor:
         baseUrl = '';
@@ -159,5 +159,11 @@ class App extends StatelessWidget {
     return const Placeholder();
   }
 }
+  ''';
+
+  static const kLogo  = '''
+╦┌┐┌┌┐┌┌─┐┬ ┬┬┌─┐┌─┐
+║│││││││ │││││└─┐├┤ 
+╩┘└┘┘└┘└─┘└┴┘┴└─┘└─┘         
   ''';
 }

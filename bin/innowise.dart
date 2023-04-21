@@ -1,17 +1,19 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:dcli/dcli.dart';
 import 'package:innowise/app_constants.dart';
 import 'package:innowise/directory_service.dart';
 import 'package:innowise/file_service.dart';
 import 'package:innowise/input.dart';
 import 'package:innowise/script_service.dart';
 import 'package:innowise/validator.dart';
+import 'package:mason_logger/mason_logger.dart' as mason;
+import 'package:dcli/dcli.dart' as dcli;
 
 void main(List<String> arguments) async {
-
   final parser = ArgParser()
-  ..addCommand('create')
+    ..addCommand('create')
     ..addOption(
       'create',
       abbr: 'c',
@@ -21,6 +23,7 @@ void main(List<String> arguments) async {
   final ArgResults argResults = parser.parse(arguments);
 
   if (argResults.arguments.contains('create')) {
+    final mason.Logger logger = mason.Logger();
     String? path = AppConstants.kCurrentPath;
     List<String> featureModules = [];
     List<String> flavors = [];
@@ -44,11 +47,14 @@ void main(List<String> arguments) async {
     );
 
     //PATH
-    String? specifyPath = Input.getValidatedInput(
-      stdoutMessage: AppConstants.kNeedSpecifyPath,
-      errorMessage: AppConstants.kInvalidYesOrNo,
-      isPositiveResponse: true,
+    String? specifyPath = logger.chooseOne(
+      AppConstants.kNeedSpecifyPath,
+      choices: [
+        AppConstants.kYes,
+        AppConstants.kNo,
+      ],
     );
+
 
     if (specifyPath == AppConstants.kYes) {
       path = Input.getValidatedInput(
@@ -58,11 +64,14 @@ void main(List<String> arguments) async {
       );
     }
     // FEATURE
-    String? addFeatures = Input.getValidatedInput(
-      stdoutMessage: AppConstants.kAddFeature,
-      errorMessage: AppConstants.kAddFeature,
-      isPositiveResponse: true,
+    String? addFeatures = logger.chooseOne(
+      AppConstants.kAddFeature,
+      choices: [
+        AppConstants.kYes,
+        AppConstants.kNo,
+      ],
     );
+
 
     if (addFeatures == AppConstants.kYes) {
       String? featuresInput = Input.getValidatedInput(
@@ -73,20 +82,13 @@ void main(List<String> arguments) async {
       featureModules = featuresInput!.split(',').map((e) => e.trim()).toList();
     }
 
-    //DIO
-    // String? dioInput = Input.getValidatedInput(
-    //   stdoutMessage: AppConstants.kWillYouUseDio,
-    //   errorMessage: AppConstants.kWillYouUseDio,
-    //   isPositiveResponse: true,
-    // );
-    //
-    // bool isDioNeeded = dioInput == AppConstants.kYes;
-
     //FLAVORS
-    String? flavorsInput = Input.getValidatedInput(
-      stdoutMessage: AppConstants.kWillYouUseFlavours,
-      errorMessage: AppConstants.kInvalidYesOrNo,
-      isPositiveResponse: true,
+    String? flavorsInput = logger.chooseOne(
+      AppConstants.kWillYouUseFlavours,
+      choices: [
+        AppConstants.kYes,
+        AppConstants.kNo,
+      ],
     );
 
     bool isFlavorsNeeded = flavorsInput == AppConstants.kYes;
@@ -103,62 +105,41 @@ void main(List<String> arguments) async {
 
     //PACKAGES FOR SELECTED MODULES
     String modulesString = featureModules.join(', ');
-    String? addPackages = Input.getValidatedInput(
-      stdoutMessage: AppConstants.kAddPackages(modulesString),
-      errorMessage: AppConstants.kInvalidYesOrNo,
-      isPositiveResponse: true,
+
+    String? addPackages = logger.chooseOne(
+      AppConstants.kAddPackages(modulesString),
+      choices: [
+        AppConstants.kYes,
+        AppConstants.kNo,
+      ],
     );
 
     if (addPackages?.toLowerCase() == AppConstants.kYes) {
       isPackagesNeeded = true;
     }
     while (isPackagesNeeded) {
-      stdout.write(AppConstants.kSelectModule(modulesString));
-      String? selectedModule = stdin.readLineSync()?.trim().toLowerCase();
-      switch (selectedModule) {
-        case AppConstants.kCore:
-        case AppConstants.kCoreUi:
-        case AppConstants.kData:
-        case AppConstants.kDomain:
-        case AppConstants.kNavigation:
-          stdout.write(AppConstants.kAddPackageSelectModule(selectedModule));
-          String? packageInput = stdin.readLineSync()?.trim();
-          List<String> selectedPackages = packageInput?.split(',') ?? [];
-          selectedPackages = selectedPackages
-              .map((package) => package.trim())
-              .where((package) => Validator.kIsValidSingleString(package))
-              .toList();
-          packageModules.add(selectedModule!);
-          packages[selectedModule] = selectedPackages;
-          break;
-
-        case AppConstants.kFeatures:
-          stdout.write(AppConstants.kEnterFeatureForPackage);
-          String? featureName = stdin.readLineSync()?.trim();
-          if (Validator.kIsValidSingleString(featureName)) {
-            stdout.write(AppConstants.kAddPackageFeatureModule(featureName));
-            String? packageInput = stdin.readLineSync()?.trim();
-            List<String> selectedPackages = packageInput?.split(',') ?? [];
-            selectedPackages = selectedPackages
-                .map((package) => package.trim())
-                .where((package) => Validator.kIsValidSingleString(package))
-                .toList();
-            packageModules.add(featureName!);
-            packages[featureName] = selectedPackages;
-          } else {
-            stdout.write(AppConstants.kInvalidFeatureForPackage);
-          }
-          break;
-        default:
-          stdout.write(AppConstants.kInvalidModuleName);
-          break;
-      }
-
-      String? addMorePackages = Input.getValidatedInput(
-        stdoutMessage: AppConstants.kAddPackageOtherModule,
-        errorMessage: AppConstants.kInvalidYesOrNo,
-        isPositiveResponse: true,
+      String? selectedModule = logger.chooseOne(
+        AppConstants.kSelectModule(modulesString),
+        choices: [...mainModules, ...featureModules],
       );
+
+      stdout.write(AppConstants.kAddPackageSelectModule(selectedModule));
+      String? packageInput = stdin.readLineSync()?.trim();
+      List<String> selectedPackages = packageInput?.split(',') ?? [];
+      selectedPackages = selectedPackages
+          .map((package) => package.trim())
+          .where((package) => Validator.kIsValidSingleString(package))
+          .toList();
+      packageModules.add(selectedModule!);
+      packages[selectedModule] = selectedPackages;
+      String? addMorePackages = logger.chooseOne(
+        AppConstants.kAddPackageOtherModule,
+        choices: [
+          AppConstants.kYes,
+          AppConstants.kNo,
+        ],
+      );
+
       if (addMorePackages?.toLowerCase() == AppConstants.kNo) {
         isPackagesNeeded = false;
       }
@@ -276,6 +257,6 @@ void main(List<String> arguments) async {
     await ScriptService.flutterClean('$path/$projectName');
     await ScriptService.flutterPubGet('$path/$projectName');
 
-    print(AppConstants.kCreateAppSuccess);
+    print(dcli.green('✅  ${AppConstants.kCreateAppSuccess}'));
   }
 }
