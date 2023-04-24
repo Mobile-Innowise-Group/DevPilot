@@ -11,8 +11,8 @@ import 'package:dcli/dcli.dart' as dcli;
 
 void main(List<String> arguments) async {
   if (arguments.contains('create')) {
-  print(dcli.red(AppConstants.kLogo));
-    if (! await ScriptService.isDartVersionInRange('2.19.5', '3.0.0')) {
+    print(dcli.red(AppConstants.kLogo));
+    if (!await ScriptService.isDartVersionInRange('2.19.5', '3.0.0')) {
       print(dcli.red(AppConstants.kUpdateDartVersion));
       return;
     }
@@ -115,10 +115,9 @@ void main(List<String> arguments) async {
       );
 
       String? packageInput = Input.getValidatedInput(
-        stdoutMessage: AppConstants.kAddPackageSelectModule(selectedModule),
-        errorMessage: AppConstants.kInvalidPackage,
-        functionValidator: Validator.kIsValidListString
-      );
+          stdoutMessage: AppConstants.kAddPackageSelectModule(selectedModule),
+          errorMessage: AppConstants.kInvalidPackage,
+          functionValidator: Validator.kIsValidListString);
 
       List<String> selectedPackages = packageInput?.split(',') ?? [];
       selectedPackages = selectedPackages
@@ -192,6 +191,8 @@ void main(List<String> arguments) async {
         destinationPath: featureDestination,
         isFeature: true,
       );
+
+
       if (packages[feature] != null) {
         await ScriptService.addPackagesToModules(
           feature,
@@ -257,4 +258,3 @@ void main(List<String> arguments) async {
     stdout.writeln(dcli.red('Undefined Command'));
   }
 }
-
