@@ -3,6 +3,8 @@ import 'dart:io';
 class AppConstants {
   //STRING CONSTANTS
   static const String kEnterProjectName = 'Enter a project name: ';
+  static const String kUpdateDartVersion =
+      'Your Dart SDK version is not supported. Please upgrade to a version >=2.19.5 and <3.0.0';
   static const String kEnterValidProjectName =
       'Please enter a valid project name (full string or snake case string): ';
   static const String kNeedSpecifyPath =
@@ -17,17 +19,17 @@ class AppConstants {
   static const String kInvalidYesOrNo =
       'Invalid input. Please enter "yes" or "no": ';
   static const String kEnterFeatures =
-      'Please enter all required feature modules separated by commas (Please Note that line can\'t endup with comma): ';
+      'Please enter all required feature modules separated by commas : ';
   static const String kInvalidFeatureName =
-      'Invalid feature modules input. Please enter full string or snake case strings separated by commas (Please Note that line can\'t endup with comma): ';
+      'Invalid feature modules input. Please enter full string or snake case strings separated by commas : ';
   static const String kWillYouUseDio =
       'Will you use Dio in your project? (yes/no) ';
   static const String kWillYouUseFlavours =
       'Will you use flavors in your project? (yes/no) ';
   static const String kEnterFlavours =
-      'Please enter the flavors separated by commas (dev, stage, prod etc... Please Note that line can\'t endup with comma): ';
+      'Please enter the flavors separated by commas (dev, stage, prod etc...): ';
   static const String kInvalidFlavours =
-      'Invalid input. Please enter only full strings separated by commas (Please Note that line can\'t endup with comma): ';
+      'Invalid input. Please enter only full strings separated by commas : ';
 
   static String kAddPackages(String modulesString) {
     return 'Do you want to add any packages to any of the following modules (core, core_ui, data, domain, navigation, features ${modulesString.isEmpty ? '' : [
@@ -42,11 +44,11 @@ class AppConstants {
   }
 
   static String kAddPackageSelectModule(String? selectedModule) {
-    return 'Please enter the packages you want to add to ${selectedModule ?? ''} module (comma-separated Please Note that line can\'t endup with comma): ';
+    return 'Please enter the packages you want to add to ${selectedModule ?? ''} module (comma-separated): ';
   }
 
   static String kAddPackageFeatureModule(String? featureName) {
-    return 'Please enter the packages you want to add to the $featureName feature (comma-separated Please Note that line can\'t endup with comma): ';
+    return 'Please enter the packages you want to add to the $featureName feature (comma-separated): ';
   }
 
   static String kFailCreateProject(String? error) {
@@ -61,6 +63,8 @@ class AppConstants {
       'Invalid module name entered. Please try again.\n';
   static const String kAddPackageOtherModule =
       'Do you want to add packages to any other module? (yes/no): ';
+  static const String kInvalidPackage =
+      'Invalid Package input please try again: ';
   static const String kCreateAppSuccess = 'App created successfully!';
 
   static const String kCore = 'core';
@@ -161,7 +165,7 @@ class App extends StatelessWidget {
 }
   ''';
 
-  static const kLogo  = '''
+  static const kLogo = '''
 ╦┌┐┌┌┐┌┌─┐┬ ┬┬┌─┐┌─┐
 ║│││││││ │││││└─┐├┤ 
 ╩┘└┘┘└┘└─┘└┴┘┴└─┘└─┘         

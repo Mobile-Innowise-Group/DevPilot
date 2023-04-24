@@ -27,19 +27,15 @@ class FileService {
     await file.writeAsString(newContent);
   }
 
-  static Future<void> runScript(String scriptName, String directoryPath) async {
-    final scriptPath = '$directoryPath/$scriptName';
-    final process = await Process.run(
-      'sh',
-      [scriptPath],
-      workingDirectory: directoryPath,
-    );
-
-    if (process.exitCode != 0) {
-      print(red('❌ Error running script: ${process.stderr}'));
-    } else {
-      print(green('✅ Script output: ${process.stdout}'));
+  static String? removeTrailingComma(String? input) {
+    if(input != null){
+      if (input.endsWith(',')) {
+        return input.substring(0, input.length - 1);
+      } else {
+        return input;
+      }
     }
+    return null;
   }
 
 }

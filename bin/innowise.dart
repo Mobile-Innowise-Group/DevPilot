@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:args/args.dart';
-import 'package:dcli/dcli.dart';
 import 'package:innowise/app_constants.dart';
 import 'package:innowise/directory_service.dart';
 import 'package:innowise/file_service.dart';
@@ -12,17 +10,12 @@ import 'package:mason_logger/mason_logger.dart' as mason;
 import 'package:dcli/dcli.dart' as dcli;
 
 void main(List<String> arguments) async {
-  final parser = ArgParser()
-    ..addCommand('create')
-    ..addOption(
-      'create',
-      abbr: 'c',
-      help: 'Specify project name',
-    );
-
-  final ArgResults argResults = parser.parse(arguments);
-
-  if (argResults.arguments.contains('create')) {
+  if (arguments.contains('create')) {
+  print(dcli.red(AppConstants.kLogo));
+    if (! await ScriptService.isDartVersionInRange('2.19.5', '3.0.0')) {
+      print(dcli.red(AppConstants.kUpdateDartVersion));
+      return;
+    }
     final mason.Logger logger = mason.Logger();
     String? path = AppConstants.kCurrentPath;
     List<String> featureModules = [];
@@ -55,7 +48,6 @@ void main(List<String> arguments) async {
       ],
     );
 
-
     if (specifyPath == AppConstants.kYes) {
       path = Input.getValidatedInput(
         stdoutMessage: AppConstants.kEnterPath,
@@ -71,7 +63,6 @@ void main(List<String> arguments) async {
         AppConstants.kNo,
       ],
     );
-
 
     if (addFeatures == AppConstants.kYes) {
       String? featuresInput = Input.getValidatedInput(
@@ -123,8 +114,12 @@ void main(List<String> arguments) async {
         choices: [...mainModules, ...featureModules],
       );
 
-      stdout.write(AppConstants.kAddPackageSelectModule(selectedModule));
-      String? packageInput = stdin.readLineSync()?.trim();
+      String? packageInput = Input.getValidatedInput(
+        stdoutMessage: AppConstants.kAddPackageSelectModule(selectedModule),
+        errorMessage: AppConstants.kInvalidPackage,
+        functionValidator: Validator.kIsValidListString
+      );
+
       List<String> selectedPackages = packageInput?.split(',') ?? [];
       selectedPackages = selectedPackages
           .map((package) => package.trim())
@@ -258,5 +253,8 @@ void main(List<String> arguments) async {
     await ScriptService.flutterPubGet('$path/$projectName');
 
     print(dcli.green('✅  ${AppConstants.kCreateAppSuccess}'));
+  } else {
+    stdout.writeln(dcli.red('Undefined Command'));
   }
 }
+
