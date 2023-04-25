@@ -32,13 +32,13 @@ class AppConstants {
       'Invalid input. Please enter only full strings separated by commas : ';
 
   static String kAddPackages(String modulesString) {
-    return 'Do you want to add any packages to any of the following modules (core, core_ui, data, domain, navigation, features ${modulesString.isEmpty ? '' : [
+    return 'Do you want to add any packages to any of the following modules (core, core_ui, data, domain, navigation, features ${modulesString.isEmpty ? '' : <String>[
         modulesString
       ]})? (yes/no): ';
   }
 
   static String kSelectModule(String modulesString) {
-    return 'Please select a module from the following list to add packages to (core, core_ui, data, domain, navigation, features ${modulesString.isEmpty ? '' : [
+    return 'Please select a module from the following list to add packages to (core, core_ui, data, domain, navigation, features ${modulesString.isEmpty ? '' : <String>[
         modulesString
       ]} ) : ';
   }
@@ -165,7 +165,7 @@ class App extends StatelessWidget {
 }
   ''';
 
-  static const kLogo = '''
+  static const String kLogo = '''
 ╦┌┐┌┌┐┌┌─┐┬ ┬┬┌─┐┌─┐
 ║│││││││ │││││└─┐├┤ 
 ╩┘└┘┘└┘└─┘└┴┘┴└─┘└─┘         

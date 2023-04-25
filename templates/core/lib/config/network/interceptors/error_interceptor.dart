@@ -40,8 +40,8 @@ class ErrorInterceptor extends Interceptor {
     if (err.response?.statusCode != 401) {
       return handler.next(err);
     }
-    final response =
-        err.response ?? Response(requestOptions: err.requestOptions);
+    final Response<dynamic> response =
+        err.response ?? Response<dynamic>(requestOptions: err.requestOptions);
     return handler.resolve(response);
   }
 

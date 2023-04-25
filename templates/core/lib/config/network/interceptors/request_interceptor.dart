@@ -7,7 +7,7 @@ class RequestInterceptor extends Interceptor {
   RequestInterceptor(this.dio, this.headers);
 
   @override
-  void onRequest(
+  Future<void> onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {

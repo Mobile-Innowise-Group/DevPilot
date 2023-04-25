@@ -6,26 +6,26 @@ class ScriptService {
   static Future<void> flutterClean(String modulePath) async {
     final ProcessResult cleanProcess = await Process.run(
       'flutter',
-      ['clean'],
+      <String>['clean'],
       workingDirectory: modulePath,
     );
     if (cleanProcess.exitCode != 0) {
-      print(red(
+      stdout.write(red(
           '❌  Error running flutter clean for $modulePath: ${cleanProcess.stderr}'));
     } else {
-      print(green('✅  Successfully ran flutter clean for $modulePath'));
+      stdout.write(green('✅  Successfully ran flutter clean for $modulePath'));
     }
   }
 
   static Future<void> flutterPubGet(String modulePath) async {
     final ProcessResult pubGetProcess = await Process.run(
-        'flutter', ['pub', 'get'],
+        'flutter', <String>['pub', 'get'],
         workingDirectory: modulePath);
     if (pubGetProcess.exitCode != 0) {
-      print(red(
+      stdout.write(red(
           '❌  Error running flutter pub get for $modulePath : ${pubGetProcess.stderr}'));
     } else {
-      print(green('✅  Successfully ran flutter pub get for $modulePath'));
+      stdout.write(green('✅  Successfully ran flutter pub get for $modulePath'));
     }
   }
 
@@ -35,7 +35,7 @@ class ScriptService {
     String workingDirectory,
   ) async {
     final String modulePath = '$workingDirectory/$moduleName';
-    final List<String> packageArgs = ['pub', 'add', ...packages];
+    final List<String> packageArgs = <String>['pub', 'add', ...packages];
 
     final ProcessResult processResult = await Process.run(
       'flutter',
@@ -43,9 +43,9 @@ class ScriptService {
       workingDirectory: modulePath,
     );
     if (processResult.exitCode == 0) {
-      print(green('✅ Packages added to module $moduleName'));
+      stdout.write(green('✅ Packages added to module $moduleName'));
     } else {
-      print(
+      stdout.write(
         red('❌ Failed to add packages to module $moduleName: ${processResult.stderr}'),
       );
     }
@@ -55,14 +55,14 @@ class ScriptService {
     final String scriptPath = '$directoryPath/$scriptName';
     final ProcessResult process = await Process.run(
       'sh',
-      [scriptPath],
+      <String>[scriptPath],
       workingDirectory: directoryPath,
     );
 
     if (process.exitCode != 0) {
-      print(red('❌ Error running script: ${process.stderr}'));
+      stdout.write(red('❌ Error running script: ${process.stderr}'));
     } else {
-      print(green('✅ Script output: ${process.stdout}'));
+      stdout.write(green('✅ Script output: ${process.stdout}'));
     }
   }
 
@@ -79,9 +79,9 @@ class ScriptService {
 
   static Future<bool> isDartVersionInRange(
       String minVersion, String maxVersion) async {
-    ProcessResult processResult = await Process.run('dart', ['--version']);
+    final ProcessResult processResult = await Process.run('dart', <String>['--version']);
     final String versionOutput = processResult.stdout.toString().trim();
-    final versionMatch =
+    final RegExpMatch? versionMatch =
         RegExp(r'version: ([\d\.]+)').firstMatch(versionOutput);
     if (versionMatch != null) {
       final String? sdkVersion = versionMatch.group(1);

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dcli/dcli.dart' as dcli;
 import 'package:dev_pilot/app_constants.dart';
 import 'package:dev_pilot/directory_service.dart';
 import 'package:dev_pilot/file_service.dart';
@@ -7,24 +8,23 @@ import 'package:dev_pilot/input.dart';
 import 'package:dev_pilot/script_service.dart';
 import 'package:dev_pilot/validator.dart';
 import 'package:mason_logger/mason_logger.dart' as mason;
-import 'package:dcli/dcli.dart' as dcli;
 
 void main(List<String> arguments) async {
   if (arguments.contains('create')) {
-    print(dcli.red(AppConstants.kLogo));
+    stdout.write(dcli.red(AppConstants.kLogo));
     if (!await ScriptService.isDartVersionInRange('2.19.5', '3.0.0')) {
-      print(dcli.red(AppConstants.kUpdateDartVersion));
+      stdout.write(dcli.red(AppConstants.kUpdateDartVersion));
       return;
     }
     final mason.Logger logger = mason.Logger();
     String? path = AppConstants.kCurrentPath;
-    List<String> featureModules = [];
-    List<String> flavors = [];
+    List<String> featureModules = <String>[];
+    List<String> flavors = <String>[];
     bool isPackagesNeeded = false;
-    List<String> packageModules = [];
-    Map<String, List<String>> packages = {};
+    final List<String> packageModules = <String>[];
+    final Map<String, List<String>> packages = <String, List<String>>{};
 
-    final List<String> mainModules = [
+    final List<String> mainModules = <String>[
       AppConstants.kCore,
       AppConstants.kCoreUi,
       AppConstants.kData,
@@ -33,16 +33,16 @@ void main(List<String> arguments) async {
     ];
 
     //PROJECT NAME
-    String? projectName = Input.getValidatedInput(
+    final String? projectName = Input.getValidatedInput(
       stdoutMessage: AppConstants.kEnterProjectName,
       errorMessage: AppConstants.kEnterValidProjectName,
       functionValidator: Validator.kIsValidProjectName,
     );
 
     //PATH
-    String? specifyPath = logger.chooseOne(
+    final String? specifyPath = logger.chooseOne(
       AppConstants.kNeedSpecifyPath,
-      choices: [
+      choices: <String?>[
         AppConstants.kYes,
         AppConstants.kNo,
       ],
@@ -56,50 +56,50 @@ void main(List<String> arguments) async {
       );
     }
     // FEATURE
-    String? addFeatures = logger.chooseOne(
+    final String? addFeatures = logger.chooseOne(
       AppConstants.kAddFeature,
-      choices: [
+      choices: <String?>[
         AppConstants.kYes,
         AppConstants.kNo,
       ],
     );
 
     if (addFeatures == AppConstants.kYes) {
-      String? featuresInput = Input.getValidatedInput(
+      final String? featuresInput = Input.getValidatedInput(
         stdoutMessage: AppConstants.kEnterFeatures,
         errorMessage: AppConstants.kInvalidFeatureName,
         functionValidator: Validator.kIsValidListString,
       );
-      featureModules = featuresInput!.split(',').map((e) => e.trim()).toList();
+      featureModules = featuresInput!.split(',').map((String e) => e.trim()).toList();
     }
 
     //FLAVORS
-    String? flavorsInput = logger.chooseOne(
+    final String? flavorsInput = logger.chooseOne(
       AppConstants.kWillYouUseFlavours,
-      choices: [
+      choices: <String?>[
         AppConstants.kYes,
         AppConstants.kNo,
       ],
     );
 
-    bool isFlavorsNeeded = flavorsInput == AppConstants.kYes;
+    final bool isFlavorsNeeded = flavorsInput == AppConstants.kYes;
 
     if (isFlavorsNeeded) {
-      String? flavorsInput = Input.getValidatedInput(
+      final String? flavorsInput = Input.getValidatedInput(
         stdoutMessage: AppConstants.kEnterFlavours,
         errorMessage: AppConstants.kInvalidFlavours,
         functionValidator: Validator.kIsValidFlavorsInput,
       );
       flavors =
-          flavorsInput!.split(',').map((flavor) => flavor.trim()).toList();
+          flavorsInput!.split(',').map((String flavor) => flavor.trim()).toList();
     }
 
     //PACKAGES FOR SELECTED MODULES
-    String modulesString = featureModules.join(', ');
+    final String modulesString = featureModules.join(', ');
 
-    String? addPackages = logger.chooseOne(
+    final String? addPackages = logger.chooseOne(
       AppConstants.kAddPackages(modulesString),
-      choices: [
+      choices: <String?>[
         AppConstants.kYes,
         AppConstants.kNo,
       ],
@@ -109,26 +109,26 @@ void main(List<String> arguments) async {
       isPackagesNeeded = true;
     }
     while (isPackagesNeeded) {
-      String? selectedModule = logger.chooseOne(
+      final String? selectedModule = logger.chooseOne(
         AppConstants.kSelectModule(modulesString),
-        choices: [...mainModules, ...featureModules],
+        choices: <String?>[...mainModules, ...featureModules],
       );
 
-      String? packageInput = Input.getValidatedInput(
+      final String? packageInput = Input.getValidatedInput(
           stdoutMessage: AppConstants.kAddPackageSelectModule(selectedModule),
           errorMessage: AppConstants.kInvalidPackage,
           functionValidator: Validator.kIsValidListString);
 
-      List<String> selectedPackages = packageInput?.split(',') ?? [];
+      List<String> selectedPackages = packageInput?.split(',') ?? <String>[];
       selectedPackages = selectedPackages
-          .map((package) => package.trim())
-          .where((package) => Validator.kIsValidSingleString(package))
+          .map((String package) => package.trim())
+          .where(Validator.kIsValidSingleString)
           .toList();
       packageModules.add(selectedModule!);
       packages[selectedModule] = selectedPackages;
-      String? addMorePackages = logger.chooseOne(
+      final String? addMorePackages = logger.chooseOne(
         AppConstants.kAddPackageOtherModule,
-        choices: [
+        choices: <String?>[
           AppConstants.kYes,
           AppConstants.kNo,
         ],
@@ -140,9 +140,9 @@ void main(List<String> arguments) async {
     }
 
     //CREATE PROJECT WITH A GIVEN PATH AND PROJECT NAME
-    ProcessResult result = Process.runSync(
+    final ProcessResult result = Process.runSync(
       AppConstants.kFlutter,
-      [
+      <String>[
         AppConstants.kCreate,
         AppConstants.kNoPub,
         AppConstants.kOrg,
@@ -154,7 +154,7 @@ void main(List<String> arguments) async {
     );
 
     if (result.exitCode != 0) {
-      print(AppConstants.kFailCreateProject(result.stderr));
+      stdout.write(AppConstants.kFailCreateProject(result.stderr));
     }
 
     await FileService.appendToFile(
@@ -162,14 +162,14 @@ void main(List<String> arguments) async {
         AppConstants.kMainPubspecDependencies,
         '$path/$projectName/pubspec.yaml');
 
-    for (String module in mainModules) {
+    for (final String module in mainModules) {
       final String modulePath = '$path/$projectName/$module';
       await DirectoryService.copy(
         sourcePath: '${AppConstants.kTemplates}/$module',
         destinationPath: modulePath,
       );
     }
-    for (String module in mainModules) {
+    for (final String module in mainModules) {
       final String modulePath = '$path/$projectName/$module';
 
       if (packages[module] != null) {
@@ -183,7 +183,7 @@ void main(List<String> arguments) async {
       await ScriptService.flutterPubGet(modulePath);
     }
 
-    for (String feature in featureModules) {
+    for (final String feature in featureModules) {
       final String featureDestination =
           '$path/$projectName/${AppConstants.kFeatures}/$feature';
       await DirectoryService.copy(
@@ -204,7 +204,7 @@ void main(List<String> arguments) async {
       await ScriptService.flutterPubGet(featureDestination);
     }
 
-    DirectoryService.copy(
+    await DirectoryService.copy(
       sourcePath: '${AppConstants.kTemplates}/${AppConstants.kPrebuild}',
       destinationPath: '$path/$projectName/',
     );
@@ -218,7 +218,7 @@ void main(List<String> arguments) async {
         fileName: 'main.dart',
       );
 
-      for (final flavor in flavors) {
+      for (final String flavor in flavors) {
         if (flavor != 'dev') {
           await FileService.appendToFile(
             AppConstants.kFlavorEnum,
@@ -240,7 +240,7 @@ void main(List<String> arguments) async {
         );
       }
 
-      final String fileName = 'main_common.dart';
+      const String fileName = 'main_common.dart';
       final File file = File('$libPath/$fileName');
       file.writeAsStringSync(AppConstants.kMainCommonContent);
     }
@@ -253,7 +253,7 @@ void main(List<String> arguments) async {
     await ScriptService.flutterClean('$path/$projectName');
     await ScriptService.flutterPubGet('$path/$projectName');
 
-    print(dcli.green('✅  ${AppConstants.kCreateAppSuccess}'));
+    stdout.write(dcli.green('✅  ${AppConstants.kCreateAppSuccess}'));
   } else {
     stdout.writeln(dcli.red('Undefined Command'));
   }

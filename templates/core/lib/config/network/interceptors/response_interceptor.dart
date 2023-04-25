@@ -6,8 +6,8 @@ class ResponseInterceptor extends Interceptor {
   ResponseInterceptor(this.dio);
 
   @override
-  void onResponse(
-    Response response,
+  Future<void> onResponse(
+    Response<dynamic> response,
     ResponseInterceptorHandler handler,
   ) async {
     //TODO: TEMPORARY SOLUTION DELETE ONCE NEW IMPLEMENTED

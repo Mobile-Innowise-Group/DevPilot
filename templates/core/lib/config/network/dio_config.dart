@@ -19,7 +19,7 @@ class DioConfig {
   DioConfig({required this.appConfig}) {
     _dio
       ..options.baseUrl = appConfig.baseUrl
-      ..interceptors.addAll([
+      ..interceptors.addAll(<Interceptor>[
         RequestInterceptor(_dio, headers),
         ErrorInterceptor(_dio),
         ResponseInterceptor(_dio),
@@ -27,7 +27,7 @@ class DioConfig {
       ]);
   }
 
-  Map<String, String> headers = {};
+  Map<String, String> headers = <String, String>{};
 
   void setToken(String? token) {
     headers['authtoken'] = token ?? '';

@@ -33,7 +33,6 @@ InputDecorationTheme _getInputDecorationTheme() {
       ),
       borderSide: BorderSide(
         color: _appColors.primaryBg,
-        width: 1,
       ),
     ),
     focusedBorder: OutlineInputBorder(

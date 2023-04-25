@@ -8,7 +8,7 @@ class FileService {
     required String newString,
     required String filePath,
   }) async {
-    final file = File(filePath);
+    final File file = File(filePath);
     String content = await file.readAsString();
     content = content.replaceAll(oldString, newString);
     await file.writeAsString(content);
@@ -16,13 +16,13 @@ class FileService {
 
   static Future<void> appendToFile(
       String oldString, String newString, String filePath) async {
-    final file = File(filePath);
-    String content = await file.readAsString();
-    final oldIndex = content.indexOf(oldString);
+    final File file = File(filePath);
+    final String content = await file.readAsString();
+    final int oldIndex = content.indexOf(oldString);
     if (oldIndex == -1) {
       throw Exception(red('❌ Could not find the old string in the file'));
     }
-    final newContent = content.replaceRange(oldIndex + oldString.length,
+    final String newContent = content.replaceRange(oldIndex + oldString.length,
         oldIndex + oldString.length, '\n$newString');
     await file.writeAsString(newContent);
   }

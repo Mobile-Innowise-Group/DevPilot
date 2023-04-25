@@ -25,9 +25,9 @@ class Validator {
       return false;
     }
 
-    List<String> modules = input.split(',');
+    final List<String> modules = input.split(',');
 
-    for (String module in modules) {
+    for (final String module in modules) {
       if (!fullStringRegex.hasMatch(module.trim()) &&
           !snakeCaseRegex.hasMatch(module.trim())) {
         return false;
@@ -43,7 +43,7 @@ class Validator {
     }
     final List<String> flavors = input.split(',');
 
-    for (String flavor in flavors) {
+    for (final String flavor in flavors) {
       if (!fullStringRegex.hasMatch(flavor.trim())) {
         return false;
       }

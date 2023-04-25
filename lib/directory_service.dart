@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:dev_pilot/app_constants.dart';
-import 'package:dev_pilot/file_service.dart';
+import 'app_constants.dart';
+import 'file_service.dart';
 
 class DirectoryService {
   static Future<void> copy({
@@ -9,17 +9,17 @@ class DirectoryService {
     required String destinationPath,
     bool isFeature = false,
   }) async {
-    Directory sourceDirectory = Directory(sourcePath);
+    final Directory sourceDirectory = Directory(sourcePath);
     if (!sourceDirectory.existsSync()) {
-      print(AppConstants.kInvalidSourceFolder);
+      stdout.write(AppConstants.kInvalidSourceFolder);
       return;
     }
-    Directory destinationDirectory = Directory(destinationPath);
+    final Directory destinationDirectory = Directory(destinationPath);
     if (!destinationDirectory.existsSync()) {
       destinationDirectory.createSync(recursive: true);
     }
-    List<FileSystemEntity> entities = sourceDirectory.listSync();
-    for (FileSystemEntity entity in entities) {
+    final List<FileSystemEntity> entities = sourceDirectory.listSync();
+    for (final FileSystemEntity entity in entities) {
       late String newPath;
       if (entity.uri.pathSegments.last.isEmpty) {
         newPath =
@@ -29,13 +29,13 @@ class DirectoryService {
             '${destinationDirectory.path}/${entity.uri.pathSegments.last}';
       }
       if (entity is Directory) {
-        Directory newDirectory = Directory(newPath);
+        final Directory newDirectory = Directory(newPath);
         newDirectory.createSync();
-        copy(sourcePath: entity.path, destinationPath: newDirectory.path);
+        await copy(sourcePath: entity.path, destinationPath: newDirectory.path);
       } else if (entity is File) {
         entity.copySync(newPath);
         if (isFeature) {
-          String featureName = destinationDirectory.path.split('/').last;
+          final String featureName = destinationDirectory.path.split('/').last;
           await FileService.updateFileContent(
             oldString: AppConstants.kFeaturePlug,
             newString: AppConstants.kFeaturePlugReplaceWith(featureName),
@@ -51,8 +51,8 @@ class DirectoryService {
     required String fileName,
     bool deleteEmptyDir = false,
   }) {
-    final directory = Directory(directoryPath);
-    final file = File('${directory.path}/$fileName');
+    final Directory directory = Directory(directoryPath);
+    final File file = File('${directory.path}/$fileName');
 
     if (file.existsSync()) {
       file.deleteSync();
