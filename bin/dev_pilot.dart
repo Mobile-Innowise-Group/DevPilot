@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:innowise/app_constants.dart';
-import 'package:innowise/directory_service.dart';
-import 'package:innowise/file_service.dart';
-import 'package:innowise/input.dart';
-import 'package:innowise/script_service.dart';
-import 'package:innowise/validator.dart';
+import 'package:dev_pilot/app_constants.dart';
+import 'package:dev_pilot/directory_service.dart';
+import 'package:dev_pilot/file_service.dart';
+import 'package:dev_pilot/input.dart';
+import 'package:dev_pilot/script_service.dart';
+import 'package:dev_pilot/validator.dart';
 import 'package:mason_logger/mason_logger.dart' as mason;
 import 'package:dcli/dcli.dart' as dcli;
 

@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:innowise/app_constants.dart';
-import 'package:innowise/file_service.dart';
+import 'package:dev_pilot/app_constants.dart';
+import 'package:dev_pilot/file_service.dart';
 
 class DirectoryService {
   static Future<void> copy({
