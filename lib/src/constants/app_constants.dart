@@ -82,7 +82,7 @@ class AppConstants {
   static const String kProjectName = '--project-name';
 
   static String kCurrentPath = Directory.current.path;
-  static String kTemplates = '$kCurrentPath/templates';
+  static String kTemplates = '$kCurrentPath/lib/src/templates';
   static const String kPrebuild = 'prebuild';
 
   static const String kFeaturePlug = 'name: plug';
@@ -91,7 +91,9 @@ class AppConstants {
     return 'name: $featureName';
   }
 
-  static const String kInvalidSourceFolder = 'Source folder does not exist';
+  static  String kInvalidSourceFolder(String folder) {
+    return '$folder folder does not exist';
+  }
 
   static String kFlavourContent(String projectName, String flavor) {
     return '''

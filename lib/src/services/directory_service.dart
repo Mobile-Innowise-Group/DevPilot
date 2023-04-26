@@ -1,10 +1,11 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:archive/archive.dart';
 import 'package:dcli/dcli.dart';
 
 import '../constants/app_constants.dart';
 import 'file_service.dart';
-
 
 /// This class provides functions to copy directories and delete files.
 class DirectoryService {
@@ -33,7 +34,9 @@ class DirectoryService {
   }) async {
     final Directory sourceDirectory = Directory(sourcePath);
     if (!sourceDirectory.existsSync()) {
-      stdout.writeln(red(AppConstants.kInvalidSourceFolder));
+      stdout.writeln(red(
+        AppConstants.kInvalidSourceFolder(sourceDirectory.path),
+      ));
       return;
     }
     final Directory destinationDirectory = Directory(destinationPath);
@@ -87,6 +90,28 @@ class DirectoryService {
 
       if (deleteEmptyDir && directory.listSync().isEmpty) {
         directory.deleteSync();
+      }
+    }
+  }
+
+  static void extractZipFile({
+    required String sourcePath,
+    required String destinationPath,
+  }) {
+    // Open the Zip file from the source path
+    final Uint8List bytes = File(sourcePath).readAsBytesSync();
+    final Archive archive = ZipDecoder().decodeBytes(bytes);
+
+    // Extract each file from the archive to the destination path
+    for (final ArchiveFile file in archive) {
+      final String filePath = '$destinationPath/${file.name}';
+      if (file.isFile) {
+        final List<int> data = file.content as List<int>;
+        File(filePath)
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(data);
+      } else {
+        Directory(filePath).create(recursive: true);
       }
     }
   }

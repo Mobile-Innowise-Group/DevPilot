@@ -1,3 +1,8 @@
+## 1.0.4
+
+- Update project structure.
+- Fixed main modules implementation
+
 ## 1.0.3
 
 - Update project structure.
