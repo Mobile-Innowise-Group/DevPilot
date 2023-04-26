@@ -28,6 +28,12 @@ To create project
 ```sh
 dev_pilot create
 ```
+Pub installs executables into $HOME/.pub-cache/bin
+If the one not in your path please add this command to your shell's config file (.bashrc, .bash_profile, etc.)
+
+```sh
+export PATH="$PATH":"$HOME/.pub-cache/bin"
+```
 
 ## Plugins
 
@@ -39,3 +45,10 @@ Instructions on how to use them in your own application are linked below.
 | dcli | https://pub.dev/packages/dcli |
 | mason_logger | https://pub.dev/packages/mason_logger |
 | args | https://pub.dev/packages/args |
+
+
+## Demo
+
+A demo gif instructions for correct use  `dev_pilot`
+
+![demo](./dev_pilot_demo.gif)
