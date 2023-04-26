@@ -1,3 +1,9 @@
+## 1.0.3
+
+- Update project structure.
+- Project Documentation added
+- Fixed Issues with wrong source path
+
 ## 1.0.2
 
 - Update pubspec.yaml.

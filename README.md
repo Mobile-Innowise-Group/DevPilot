@@ -45,3 +45,10 @@ Instructions on how to use them in your own application are linked below.
 | dcli | https://pub.dev/packages/dcli |
 | mason_logger | https://pub.dev/packages/mason_logger |
 | args | https://pub.dev/packages/args |
+
+
+## Demo
+
+A demo gif instructions for correct use  `dev_pilot`
+
+![demo](./dev_pilot_demo.gif)
