@@ -189,8 +189,11 @@ void main(List<String> arguments) async {
 
     //Extract main modules from local [templates/archive.zip]
     // to the newly created project directory
+    final String scriptPath =
+        Uri.parse(Platform.script.toString()).toFilePath();
+    final String scriptDirectory = File(scriptPath).parent.absolute.path;
     DirectoryService.extractZipFile(
-      sourcePath: '${AppConstants.kTemplates}/archive.zip',
+      sourcePath: '$scriptDirectory/archive.zip',
       destinationPath: '$path/$projectName',
     );
 
