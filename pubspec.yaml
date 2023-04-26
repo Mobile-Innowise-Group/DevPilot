@@ -1,10 +1,7 @@
 name: dev_pilot
 description: Command-line interface (CLI) for generating a Flutter project
-version: 1.0.3
+version: 1.0.4
 repository: https://github.com/Mobile-Innowise-Group/DevPilot/tree/main
-
-assets:
-  - templates
 
 platforms:
   android:
@@ -26,6 +23,7 @@ dependencies:
   args: ^2.4.0
   dcli: ^1.36.0
   mason_logger: ^0.2.5
+  archive: ^3.3.7
 
 dev_dependencies:
   lints: ^2.0.1

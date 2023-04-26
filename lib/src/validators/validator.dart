@@ -33,7 +33,6 @@ class Validator {
     return directory.existsSync();
   }
 
-
   /// Returns true if the given input string is a comma-separated
   /// list of valid module names
   ///

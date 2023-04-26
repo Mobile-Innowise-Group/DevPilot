@@ -4,7 +4,6 @@ import 'package:dcli/dcli.dart';
 
 import 'file_service.dart';
 
-
 /// This class provides a function
 /// to get validated user input from the command line.
 class InputService {

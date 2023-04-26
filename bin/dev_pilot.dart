@@ -187,15 +187,12 @@ void main(List<String> arguments) async {
         AppConstants.kMainPubspecDependencies,
         '$path/$projectName/pubspec.yaml');
 
-    ///Copy files & folders from local [templates] folder
-    ///to the newly created project
-    for (final String module in mainModules) {
-      final String modulePath = '$path/$projectName/$module';
-      await DirectoryService.copy(
-        sourcePath: '${AppConstants.kTemplates}/$module',
-        destinationPath: modulePath,
-      );
-    }
+    //Extract main modules from local [templates/archive.zip]
+    // to the newly created project directory
+    DirectoryService.extractZipFile(
+      sourcePath: '${AppConstants.kTemplates}/archive.zip',
+      destinationPath: '$path/$projectName',
+    );
 
     /// If user specified [packages]
     for (final String module in mainModules) {
@@ -233,7 +230,6 @@ void main(List<String> arguments) async {
       await ScriptService.flutterClean(featureDestination);
       await ScriptService.flutterPubGet(featureDestination);
     }
-
 
     //Copy prebuild.sh from local templates folder to the root of new
     //Flutter project
@@ -279,7 +275,6 @@ void main(List<String> arguments) async {
       final File file = File('$libPath/$fileName');
       file.writeAsStringSync(AppConstants.kMainCommonContent);
     }
-
 
     //Delete test file as don't need one for the moment
     DirectoryService.deleteFile(
