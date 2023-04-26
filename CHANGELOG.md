@@ -1,3 +1,7 @@
+## 1.0.5
+
+- Update  path to script dir from relative to absolute one.
+
 ## 1.0.4
 
 - Update project structure.
