@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
+
 import 'file_service.dart';
+
 
 /// This class provides a function
 /// to get validated user input from the command line.
-class Input {
+class InputService {
   /// Gets validated user input from the command line.
   ///
   /// [stdoutMessage] is the message to display to the user before getting input.

@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 
-import 'app_constants.dart';
+import '../constants/app_constants.dart';
 import 'file_service.dart';
+
 
 /// This class provides functions to copy directories and delete files.
 class DirectoryService {

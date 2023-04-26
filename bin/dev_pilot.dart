@@ -2,12 +2,12 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart' as dcli;
-import 'package:dev_pilot/app_constants.dart';
-import 'package:dev_pilot/directory_service.dart';
-import 'package:dev_pilot/file_service.dart';
-import 'package:dev_pilot/input.dart';
-import 'package:dev_pilot/script_service.dart';
-import 'package:dev_pilot/validator.dart';
+import 'package:dev_pilot/src/constants/app_constants.dart';
+import 'package:dev_pilot/src/services/directory_service.dart';
+import 'package:dev_pilot/src/services/file_service.dart';
+import 'package:dev_pilot/src/services/input_service.dart';
+import 'package:dev_pilot/src/services/script_service.dart';
+import 'package:dev_pilot/src/validators/validator.dart';
 import 'package:mason_logger/mason_logger.dart' as mason;
 
 // Main method
@@ -44,7 +44,7 @@ void main(List<String> arguments) async {
     ];
 
     // Get project name from user input
-    final String? projectName = Input.getValidatedInput(
+    final String? projectName = InputService.getValidatedInput(
       stdoutMessage: AppConstants.kEnterProjectName,
       errorMessage: AppConstants.kEnterValidProjectName,
       functionValidator: Validator.kIsValidProjectName,
@@ -61,7 +61,7 @@ void main(List<String> arguments) async {
 
     // If user selects to specify a path, get the path from user input
     if (specifyPath == AppConstants.kYes) {
-      path = Input.getValidatedInput(
+      path = InputService.getValidatedInput(
         stdoutMessage: AppConstants.kEnterPath,
         errorMessage: AppConstants.kInvalidPath,
         functionValidator: Validator.kIsValidPath,
@@ -80,7 +80,7 @@ void main(List<String> arguments) async {
     // If user selects to add feature modules,
     // get the feature module names from user input
     if (addFeatures == AppConstants.kYes) {
-      final String? featuresInput = Input.getValidatedInput(
+      final String? featuresInput = InputService.getValidatedInput(
         stdoutMessage: AppConstants.kEnterFeatures,
         errorMessage: AppConstants.kInvalidFeatureName,
         functionValidator: Validator.kIsValidListString,
@@ -102,7 +102,7 @@ void main(List<String> arguments) async {
 
     // If user selects to add flavors, get the flavor names from user input
     if (isFlavorsNeeded) {
-      final String? flavorsInput = Input.getValidatedInput(
+      final String? flavorsInput = InputService.getValidatedInput(
         stdoutMessage: AppConstants.kEnterFlavours,
         errorMessage: AppConstants.kInvalidFlavours,
         functionValidator: Validator.kIsValidFlavorsInput,
@@ -138,7 +138,7 @@ void main(List<String> arguments) async {
         choices: <String?>[...mainModules, ...featureModules],
       );
 
-      final String? packageInput = Input.getValidatedInput(
+      final String? packageInput = InputService.getValidatedInput(
           stdoutMessage: AppConstants.kAddPackageSelectModule(selectedModule),
           errorMessage: AppConstants.kInvalidPackage,
           functionValidator: Validator.kIsValidListString);
