@@ -91,7 +91,7 @@ class AppConstants {
     return 'name: $featureName';
   }
 
-  static  String kInvalidSourceFolder(String folder) {
+  static String kInvalidSourceFolder(String folder) {
     return '$folder folder does not exist';
   }
 
