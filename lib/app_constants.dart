@@ -65,7 +65,6 @@ class AppConstants {
       'Do you want to add packages to any other module? (yes/no): ';
   static const String kInvalidPackage =
       'Invalid Package input please try again: ';
-  static const String kCreateAppSuccess = 'App created successfully!';
 
   static const String kCore = 'core';
   static const String kCoreUi = 'core_ui';
@@ -122,7 +121,7 @@ void main() {
     ''';
   }
 
-  static String kMainPubspecDependencies = '''  
+  static String kMainPubspecDependencies = '''
   domain:
     path: ./domain
   core:
@@ -132,8 +131,7 @@ void main() {
   data:
     path: ./data
   navigation:
-    path: ./navigation
-    ''';
+    path: ./navigation''';
 
   static const String kMainCommonContent = '''
 import 'package:core/core.dart';

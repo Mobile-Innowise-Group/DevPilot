@@ -28,6 +28,12 @@ To create project
 ```sh
 dev_pilot create
 ```
+Pub installs executables into $HOME/.pub-cache/bin
+If the one not in your path please add this command to your shell's config file (.bashrc, .bash_profile, etc.)
+
+```sh
+export PATH="$PATH":"$HOME/.pub-cache/bin"
+```
 
 ## Plugins
 

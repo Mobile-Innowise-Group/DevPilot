@@ -1,9 +1,30 @@
 import 'dart:io';
 
+import 'package:dcli/dcli.dart';
+
 import 'app_constants.dart';
 import 'file_service.dart';
 
+/// This class provides functions to copy directories and delete files.
 class DirectoryService {
+  /// Copies a directory from the source path to the destination path.
+  ///
+  /// [sourcePath] is the path of the directory to be copied.
+  /// [destinationPath] is the path of the directory where the contents will
+  /// be copied.
+  /// [isFeature] is a boolean flag indicating whether the directory being
+  /// copied is a feature directory.
+  ///
+  /// If the source directory does not exist, an error message will be printed
+  /// to the console and the function will return.
+  ///
+  /// If the destination directory does not exist, it will be created recursively.
+  ///
+  /// The function will copy all files and subdirectories in the source
+  /// directory to the destination directory. If [isFeature] is `true`,
+  /// it will also update the contents of any copied files.
+  ///
+  /// Throws an exception if there is an error copying any files or directories.
   static Future<void> copy({
     required String sourcePath,
     required String destinationPath,
@@ -11,7 +32,7 @@ class DirectoryService {
   }) async {
     final Directory sourceDirectory = Directory(sourcePath);
     if (!sourceDirectory.existsSync()) {
-      stdout.write(AppConstants.kInvalidSourceFolder);
+      stdout.writeln(red(AppConstants.kInvalidSourceFolder));
       return;
     }
     final Directory destinationDirectory = Directory(destinationPath);
@@ -46,6 +67,12 @@ class DirectoryService {
     }
   }
 
+  /// Deletes a file with the given [fileName] in the directory at [directoryPath].
+  ///
+  /// If the file does not exist, this function does nothing.
+  ///
+  /// If [deleteEmptyDir] is `true` and the directory is empty after deleting
+  /// the file, the directory will be deleted.
   static void deleteFile({
     required String directoryPath,
     required String fileName,

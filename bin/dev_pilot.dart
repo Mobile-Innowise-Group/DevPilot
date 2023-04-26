@@ -1,3 +1,4 @@
+// Import required libraries and packages
 import 'dart:io';
 
 import 'package:dcli/dcli.dart' as dcli;
@@ -9,14 +10,24 @@ import 'package:dev_pilot/script_service.dart';
 import 'package:dev_pilot/validator.dart';
 import 'package:mason_logger/mason_logger.dart' as mason;
 
+// Main method
 void main(List<String> arguments) async {
+  // Check if the argument is create
   if (arguments.contains('create')) {
+    // Display the logo
+
     stdout.write(dcli.red(AppConstants.kLogo));
+
+    // Check if the Dart version is in the correct range
     if (!await ScriptService.isDartVersionInRange('2.19.5', '3.0.0')) {
-      stdout.write(dcli.red(AppConstants.kUpdateDartVersion));
+      stdout.writeln(dcli.red(AppConstants.kUpdateDartVersion));
       return;
     }
+
+    // Create a new logger
     final mason.Logger logger = mason.Logger();
+
+    // Initialize the variables with default values
     String? path = AppConstants.kCurrentPath;
     List<String> featureModules = <String>[];
     List<String> flavors = <String>[];
@@ -32,14 +43,14 @@ void main(List<String> arguments) async {
       AppConstants.kNavigation,
     ];
 
-    //PROJECT NAME
+    // Get project name from user input
     final String? projectName = Input.getValidatedInput(
       stdoutMessage: AppConstants.kEnterProjectName,
       errorMessage: AppConstants.kEnterValidProjectName,
       functionValidator: Validator.kIsValidProjectName,
     );
 
-    //PATH
+    // Ask user if  want to specify a path
     final String? specifyPath = logger.chooseOne(
       AppConstants.kNeedSpecifyPath,
       choices: <String?>[
@@ -48,6 +59,7 @@ void main(List<String> arguments) async {
       ],
     );
 
+    // If user selects to specify a path, get the path from user input
     if (specifyPath == AppConstants.kYes) {
       path = Input.getValidatedInput(
         stdoutMessage: AppConstants.kEnterPath,
@@ -55,7 +67,8 @@ void main(List<String> arguments) async {
         functionValidator: Validator.kIsValidPath,
       );
     }
-    // FEATURE
+
+    // Ask user if  want to add feature modules
     final String? addFeatures = logger.chooseOne(
       AppConstants.kAddFeature,
       choices: <String?>[
@@ -64,16 +77,19 @@ void main(List<String> arguments) async {
       ],
     );
 
+    // If user selects to add feature modules,
+    // get the feature module names from user input
     if (addFeatures == AppConstants.kYes) {
       final String? featuresInput = Input.getValidatedInput(
         stdoutMessage: AppConstants.kEnterFeatures,
         errorMessage: AppConstants.kInvalidFeatureName,
         functionValidator: Validator.kIsValidListString,
       );
-      featureModules = featuresInput!.split(',').map((String e) => e.trim()).toList();
+      featureModules =
+          featuresInput!.split(',').map((String e) => e.trim()).toList();
     }
 
-    //FLAVORS
+    // Ask user if  want to add flavors
     final String? flavorsInput = logger.chooseOne(
       AppConstants.kWillYouUseFlavours,
       choices: <String?>[
@@ -84,19 +100,24 @@ void main(List<String> arguments) async {
 
     final bool isFlavorsNeeded = flavorsInput == AppConstants.kYes;
 
+    // If user selects to add flavors, get the flavor names from user input
     if (isFlavorsNeeded) {
       final String? flavorsInput = Input.getValidatedInput(
         stdoutMessage: AppConstants.kEnterFlavours,
         errorMessage: AppConstants.kInvalidFlavours,
         functionValidator: Validator.kIsValidFlavorsInput,
       );
-      flavors =
-          flavorsInput!.split(',').map((String flavor) => flavor.trim()).toList();
+      flavors = flavorsInput!
+          .split(',')
+          .map((String flavor) => flavor.trim())
+          .toList();
     }
 
-    //PACKAGES FOR SELECTED MODULES
+    //Convert specified features List<Strings>
+    //to a single String
     final String modulesString = featureModules.join(', ');
 
+    // Ask user if  want to add package to specified module
     final String? addPackages = logger.chooseOne(
       AppConstants.kAddPackages(modulesString),
       choices: <String?>[
@@ -108,6 +129,9 @@ void main(List<String> arguments) async {
     if (addPackages?.toLowerCase() == AppConstants.kYes) {
       isPackagesNeeded = true;
     }
+
+    // If user selects to add packages, get the package names from user input
+    // and so on while user selects "no"
     while (isPackagesNeeded) {
       final String? selectedModule = logger.chooseOne(
         AppConstants.kSelectModule(modulesString),
@@ -139,7 +163,7 @@ void main(List<String> arguments) async {
       }
     }
 
-    //CREATE PROJECT WITH A GIVEN PATH AND PROJECT NAME
+    //Create project with a given name
     final ProcessResult result = Process.runSync(
       AppConstants.kFlutter,
       <String>[
@@ -154,14 +178,17 @@ void main(List<String> arguments) async {
     );
 
     if (result.exitCode != 0) {
-      stdout.write(AppConstants.kFailCreateProject(result.stderr));
+      stdout.writeln(dcli.red(AppConstants.kFailCreateProject(result.stderr)));
     }
 
+    //Add dependencies to main pubspec.yaml
     await FileService.appendToFile(
         AppConstants.kSdkFlutter,
         AppConstants.kMainPubspecDependencies,
         '$path/$projectName/pubspec.yaml');
 
+    ///Copy files & folders from local [templates] folder
+    ///to the newly created project
     for (final String module in mainModules) {
       final String modulePath = '$path/$projectName/$module';
       await DirectoryService.copy(
@@ -169,6 +196,8 @@ void main(List<String> arguments) async {
         destinationPath: modulePath,
       );
     }
+
+    /// If user specified [packages]
     for (final String module in mainModules) {
       final String modulePath = '$path/$projectName/$module';
 
@@ -183,6 +212,8 @@ void main(List<String> arguments) async {
       await ScriptService.flutterPubGet(modulePath);
     }
 
+    //Copy feature folder & pubspec.yaml
+    // from local templates folder to a given path
     for (final String feature in featureModules) {
       final String featureDestination =
           '$path/$projectName/${AppConstants.kFeatures}/$feature';
@@ -191,7 +222,6 @@ void main(List<String> arguments) async {
         destinationPath: featureDestination,
         isFeature: true,
       );
-
 
       if (packages[feature] != null) {
         await ScriptService.addPackagesToModules(
@@ -204,11 +234,16 @@ void main(List<String> arguments) async {
       await ScriptService.flutterPubGet(featureDestination);
     }
 
+
+    //Copy prebuild.sh from local templates folder to the root of new
+    //Flutter project
     await DirectoryService.copy(
       sourcePath: '${AppConstants.kTemplates}/${AppConstants.kPrebuild}',
       destinationPath: '$path/$projectName/',
     );
 
+    //If user specified flavors above so create new files and add
+    // new flavors to enum according specified flavors list
     if (flavors.isNotEmpty) {
       final String libPath = '$path/$projectName/lib';
       final String appConfigPath =
@@ -245,15 +280,16 @@ void main(List<String> arguments) async {
       file.writeAsStringSync(AppConstants.kMainCommonContent);
     }
 
+
+    //Delete test file as don't need one for the moment
     DirectoryService.deleteFile(
       directoryPath: '$path/$projectName/test',
       fileName: 'widget_test.dart',
     );
 
+    //Clean and pub get ready project
     await ScriptService.flutterClean('$path/$projectName');
     await ScriptService.flutterPubGet('$path/$projectName');
-
-    stdout.write(dcli.green('✅  ${AppConstants.kCreateAppSuccess}'));
   } else {
     stdout.writeln(dcli.red('Undefined Command'));
   }
