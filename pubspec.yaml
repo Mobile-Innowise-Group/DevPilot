@@ -3,6 +3,9 @@ description: Command-line interface (CLI) for generating a Flutter project
 version: 1.0.3
 repository: https://github.com/Mobile-Innowise-Group/DevPilot/tree/main
 
+assets:
+  - templates
+
 platforms:
   android:
   ios:
@@ -13,6 +16,7 @@ platforms:
 
 environment:
   sdk: '>=2.19.5 <3.0.0'
+
 
 
 dependencies:
@@ -29,3 +33,4 @@ dev_dependencies:
 
 executables:
   dev_pilot:
+

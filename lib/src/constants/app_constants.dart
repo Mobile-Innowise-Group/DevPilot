@@ -82,7 +82,7 @@ class AppConstants {
   static const String kProjectName = '--project-name';
 
   static String kCurrentPath = Directory.current.path;
-  static String kTemplates = '$kCurrentPath/lib/src/templates';
+  static String kTemplates = '$kCurrentPath/templates';
   static const String kPrebuild = 'prebuild';
 
   static const String kFeaturePlug = 'name: plug';
