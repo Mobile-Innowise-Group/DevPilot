@@ -24,6 +24,21 @@
       <excludeFolder url="file://$MODULE_DIR$/templates/feature/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/templates/feature/build" />
       <excludeFolder url="file://$MODULE_DIR$/templates/feature/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/core/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/core/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/core/build" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/data/build" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/data/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/data/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/core_ui/build" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/core_ui/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/core_ui/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/navigation/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/navigation/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/navigation/build" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/domain/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/domain/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/domain/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
