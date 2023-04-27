@@ -70,7 +70,7 @@ class AppConstants {
   static const String kCoreUi = 'core_ui';
   static const String kData = 'data';
   static const String kDomain = 'domain';
-  static const String kFeatures = 'features';
+  static const String kFeatures = 'feature';
   static const String kFeature = 'feature';
   static const String kNavigation = 'navigation';
 

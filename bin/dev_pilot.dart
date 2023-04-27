@@ -232,7 +232,7 @@ void main(List<String> arguments) async {
       final String featureDestination =
           '$path/$projectName/${AppConstants.kFeatures}/$feature';
       await DirectoryService.copy(
-        sourcePath: '${AppConstants.kTemplates}/${AppConstants.kFeature}',
+        sourcePath: '$templatesPath/${AppConstants.kFeature}',
         destinationPath: featureDestination,
         isFeature: true,
       );
@@ -251,7 +251,7 @@ void main(List<String> arguments) async {
     //Copy prebuild.sh from local templates folder to the root of new
     //Flutter project
     await DirectoryService.copy(
-      sourcePath: '${AppConstants.kTemplates}/${AppConstants.kPrebuild}',
+      sourcePath: '$templatesPath/${AppConstants.kPrebuild}',
       destinationPath: '$path/$projectName/',
     );
 
