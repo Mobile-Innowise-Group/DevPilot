@@ -187,15 +187,29 @@ void main(List<String> arguments) async {
         AppConstants.kMainPubspecDependencies,
         '$path/$projectName/pubspec.yaml');
 
-    //Extract main modules from local [templates/archive.zip]
+    //Clone remote templates repo with folders & files structure
     // to the newly created project directory
     final String scriptPath =
         Uri.parse(Platform.script.toString()).toFilePath();
     final String scriptDirectory = File(scriptPath).parent.absolute.path;
-    DirectoryService.extractZipFile(
-      sourcePath: '$scriptDirectory/archive.zip',
-      destinationPath: '$path/$projectName',
-    );
+    final String templatesPath = '$scriptDirectory/templates';
+
+    final Directory templatesDirectory = Directory(templatesPath);
+
+    if (!templatesDirectory.existsSync()) {
+      await DirectoryService.cloneRepository(
+        AppConstants.kRemoteTemplatesLink,
+        templatesPath,
+      );
+    }
+
+    for (final String module in mainModules) {
+      final String modulePath = '$path/$projectName/$module';
+      await DirectoryService.copy(
+        sourcePath: '$templatesPath/$module',
+        destinationPath: modulePath,
+      );
+    }
 
     /// If user specified [packages]
     for (final String module in mainModules) {

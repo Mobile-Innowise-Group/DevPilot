@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:archive/archive.dart';
 import 'package:dcli/dcli.dart';
 
 import '../constants/app_constants.dart';
@@ -94,25 +92,22 @@ class DirectoryService {
     }
   }
 
-  static void extractZipFile({
-    required String sourcePath,
-    required String destinationPath,
-  }) {
-    // Open the Zip file from the source path
-    final Uint8List bytes = File(sourcePath).readAsBytesSync();
-    final Archive archive = ZipDecoder().decodeBytes(bytes);
+  static Future<void> cloneRepository(
+      String repoUrl, String destinationPath) async {
+    final ProcessResult processResult = await Process.run(
+      'git',
+      <String>[
+        'clone',
+        repoUrl,
+        destinationPath,
+      ],
+    );
 
-    // Extract each file from the archive to the destination path
-    for (final ArchiveFile file in archive) {
-      final String filePath = '$destinationPath/${file.name}';
-      if (file.isFile) {
-        final List<int> data = file.content as List<int>;
-        File(filePath)
-          ..createSync(recursive: true)
-          ..writeAsBytesSync(data);
-      } else {
-        Directory(filePath).create(recursive: true);
-      }
+    if (processResult.exitCode == 0) {
+      stdout.writeln(green('✅  Repository cloned successfully!'));
+    } else {
+      stdout.writeln(
+          red('❌  Failed to clone repository: ${processResult.stderr}'));
     }
   }
 }

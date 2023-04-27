@@ -95,6 +95,9 @@ class AppConstants {
     return '$folder folder does not exist';
   }
 
+  static const String kRemoteTemplatesLink =
+      'https://github.com/Mobile-Innowise-Group/DevPilotTemplates';
+
   static String kFlavourContent(String projectName, String flavor) {
     return '''
 import 'package:core/core.dart';
