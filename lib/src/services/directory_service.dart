@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:archive/archive.dart';
 import 'package:dcli/dcli.dart';
 
 import '../constants/app_constants.dart';
@@ -98,7 +96,7 @@ class DirectoryService {
       String repoUrl, String destinationPath) async {
     final ProcessResult processResult = await Process.run(
       'git',
-      [
+      <String>[
         'clone',
         repoUrl,
         destinationPath,
