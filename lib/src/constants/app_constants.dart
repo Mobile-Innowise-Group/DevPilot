@@ -4,32 +4,23 @@ class AppConstants {
   //STRING CONSTANTS
   static const String kEnterProjectName = 'Enter a project name: ';
   static const String kUpdateDartVersion =
-      'Your Dart SDK version is not supported. Please upgrade to a version >=2.19.5 and <3.0.0';
-  static const String kEnterValidProjectName =
-      'Please enter a valid project name (full string or snake case string): ';
+      'Your Dart SDK version is not supported. Please upgrade to a version >=2.19.5 and <3.1.0';
+  static const String kEnterValidProjectName = 'Please enter a valid project name (full string or snake case string): ';
   static const String kNeedSpecifyPath =
       'Do you need specify path ? Note if you select "no" project will be created in a current location (Yes/No): ';
-  static const String kEnterPath =
-      'Please specify the path where you want to create the project: ';
-  static const String kInvalidPath =
-      'Invalid path. Please specify a valid path: ';
+  static const String kEnterPath = 'Please specify the path where you want to create the project: ';
+  static const String kInvalidPath = 'Invalid path. Please specify a valid path: ';
   static const String kAddFeature = 'Do you want add features now? (Yes/No): ';
   static const String kYes = 'yes';
   static const String kNo = 'no';
-  static const String kInvalidYesOrNo =
-      'Invalid input. Please enter "yes" or "no": ';
-  static const String kEnterFeatures =
-      'Please enter all required feature modules separated by commas : ';
+  static const String kInvalidYesOrNo = 'Invalid input. Please enter "yes" or "no": ';
+  static const String kEnterFeatures = 'Please enter all required feature modules separated by commas : ';
   static const String kInvalidFeatureName =
       'Invalid feature modules input. Please enter full string or snake case strings separated by commas : ';
-  static const String kWillYouUseDio =
-      'Will you use Dio in your project? (yes/no) ';
-  static const String kWillYouUseFlavours =
-      'Will you use flavors in your project? (yes/no) ';
-  static const String kEnterFlavours =
-      'Please enter the flavors separated by commas (dev, stage, prod etc...): ';
-  static const String kInvalidFlavours =
-      'Invalid input. Please enter only full strings separated by commas : ';
+  static const String kWillYouUseDio = 'Will you use Dio in your project? (yes/no) ';
+  static const String kWillYouUseFlavours = 'Will you use flavors in your project? (yes/no) ';
+  static const String kEnterFlavours = 'Please enter the flavors separated by commas (dev, stage, prod etc...): ';
+  static const String kInvalidFlavours = 'Invalid input. Please enter only full strings separated by commas : ';
 
   static String kAddPackages(String modulesString) {
     return 'Do you want to add any packages to any of the following modules (core, core_ui, data, domain, navigation, features ${modulesString.isEmpty ? '' : <String>[
@@ -55,16 +46,11 @@ class AppConstants {
     return 'Failed to create Flutter project: $error';
   }
 
-  static const String kEnterFeatureForPackage =
-      'Please enter the feature name for which you want to add packages: ';
-  static const String kInvalidFeatureForPackage =
-      'Invalid feature name entered. Please try again.\n';
-  static const String kInvalidModuleName =
-      'Invalid module name entered. Please try again.\n';
-  static const String kAddPackageOtherModule =
-      'Do you want to add packages to any other module? (yes/no): ';
-  static const String kInvalidPackage =
-      'Invalid Package input please try again: ';
+  static const String kEnterFeatureForPackage = 'Please enter the feature name for which you want to add packages: ';
+  static const String kInvalidFeatureForPackage = 'Invalid feature name entered. Please try again.\n';
+  static const String kInvalidModuleName = 'Invalid module name entered. Please try again.\n';
+  static const String kAddPackageOtherModule = 'Do you want to add packages to any other module? (yes/no): ';
+  static const String kInvalidPackage = 'Invalid Package input please try again: ';
 
   static const String kCore = 'core';
   static const String kCoreUi = 'core_ui';
@@ -95,8 +81,7 @@ class AppConstants {
     return '$folder folder does not exist';
   }
 
-  static const String kRemoteTemplatesLink =
-      'https://github.com/Mobile-Innowise-Group/DevPilotTemplates';
+  static const String kRemoteTemplatesLink = 'https://github.com/Mobile-Innowise-Group/DevPilotTemplates';
 
   static String kFlavourContent(String projectName, String flavor) {
     return '''
