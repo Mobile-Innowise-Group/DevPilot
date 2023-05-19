@@ -85,7 +85,8 @@ void main(List<String> arguments) async {
         errorMessage: AppConstants.kInvalidFeatureName,
         functionValidator: Validator.kIsValidListString,
       );
-      featureModules = featuresInput!.split(',').map((String e) => e.trim()).toList();
+      featureModules =
+          featuresInput!.split(',').map((String e) => e.trim()).toList();
     }
 
     // Ask user if  want to add flavors
@@ -106,7 +107,10 @@ void main(List<String> arguments) async {
         errorMessage: AppConstants.kInvalidFlavours,
         functionValidator: Validator.kIsValidFlavorsInput,
       );
-      flavors = flavorsInput!.split(',').map((String flavor) => flavor.trim()).toList();
+      flavors = flavorsInput!
+          .split(',')
+          .map((String flavor) => flavor.trim())
+          .toList();
     }
 
     //Convert specified features List<Strings>
@@ -140,8 +144,10 @@ void main(List<String> arguments) async {
           functionValidator: Validator.kIsValidListString);
 
       List<String> selectedPackages = packageInput?.split(',') ?? <String>[];
-      selectedPackages =
-          selectedPackages.map((String package) => package.trim()).where(Validator.kIsValidSingleString).toList();
+      selectedPackages = selectedPackages
+          .map((String package) => package.trim())
+          .where(Validator.kIsValidSingleString)
+          .toList();
       packageModules.add(selectedModule!);
       packages[selectedModule] = selectedPackages;
       final String? addMorePackages = logger.chooseOne(
@@ -177,11 +183,14 @@ void main(List<String> arguments) async {
 
     //Add dependencies to main pubspec.yaml
     await FileService.appendToFile(
-        AppConstants.kSdkFlutter, AppConstants.kMainPubspecDependencies, '$path/$projectName/pubspec.yaml');
+        AppConstants.kSdkFlutter,
+        AppConstants.kMainPubspecDependencies,
+        '$path/$projectName/pubspec.yaml');
 
     //Clone remote templates repo with folders & files structure
     // to the newly created project directory
-    final String scriptPath = Uri.parse(Platform.script.toString()).toFilePath();
+    final String scriptPath =
+        Uri.parse(Platform.script.toString()).toFilePath();
     final String scriptDirectory = File(scriptPath).parent.absolute.path;
     final String templatesPath = '$scriptDirectory/templates';
 
@@ -220,7 +229,8 @@ void main(List<String> arguments) async {
     //Copy feature folder & pubspec.yaml
     // from local templates folder to a given path
     for (final String feature in featureModules) {
-      final String featureDestination = '$path/$projectName/${AppConstants.kFeatures}/$feature';
+      final String featureDestination =
+          '$path/$projectName/${AppConstants.kFeatures}/$feature';
       await DirectoryService.copy(
         sourcePath: '$templatesPath/${AppConstants.kFeature}',
         destinationPath: featureDestination,
@@ -249,7 +259,8 @@ void main(List<String> arguments) async {
     // new flavors to enum according specified flavors list
     if (flavors.isNotEmpty) {
       final String libPath = '$path/$projectName/lib';
-      final String appConfigPath = '$path/$projectName/${AppConstants.kAppConfigPath}';
+      final String appConfigPath =
+          '$path/$projectName/${AppConstants.kAppConfigPath}';
       DirectoryService.deleteFile(
         directoryPath: libPath,
         fileName: 'main.dart',
