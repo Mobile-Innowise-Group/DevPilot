@@ -1,3 +1,6 @@
+## 1.0.8
+- Update pubspec.yaml
+
 ## 1.0.7
 
 - Fixed feature module & prebuild script errors

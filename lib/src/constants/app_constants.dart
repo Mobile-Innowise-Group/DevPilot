@@ -4,7 +4,7 @@ class AppConstants {
   //STRING CONSTANTS
   static const String kEnterProjectName = 'Enter a project name: ';
   static const String kUpdateDartVersion =
-      'Your Dart SDK version is not supported. Please upgrade to a version >=2.19.5 and <3.0.0';
+      'Your Dart SDK version is not supported. Please upgrade to a version >=2.19.5 and <3.1.0';
   static const String kEnterValidProjectName =
       'Please enter a valid project name (full string or snake case string): ';
   static const String kNeedSpecifyPath =
