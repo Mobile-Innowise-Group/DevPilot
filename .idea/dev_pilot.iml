@@ -39,6 +39,9 @@
       <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/domain/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/domain/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/domain/build" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/feature/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/feature/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/src/templates/feature/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
