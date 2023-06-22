@@ -1,3 +1,6 @@
+## 1.0.9
+- Fix Error caused by Power Shell in Windows
+
 ## 1.0.8
 - Update pubspec.yaml
 
