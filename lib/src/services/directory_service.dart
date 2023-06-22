@@ -101,6 +101,7 @@ class DirectoryService {
         repoUrl,
         destinationPath,
       ],
+      runInShell: true,
     );
 
     if (processResult.exitCode == 0) {

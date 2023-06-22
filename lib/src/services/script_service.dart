@@ -16,6 +16,7 @@ class ScriptService {
       'flutter',
       <String>['clean'],
       workingDirectory: modulePath,
+      runInShell: true,
     );
     if (cleanProcess.exitCode != 0) {
       stdout.writeln(red(
@@ -34,8 +35,11 @@ class ScriptService {
   /// If the command fails, an error message is printed to the console.
   static Future<void> flutterPubGet(String modulePath) async {
     final ProcessResult pubGetProcess = await Process.run(
-        'flutter', <String>['pub', 'get'],
-        workingDirectory: modulePath);
+      'flutter',
+      <String>['pub', 'get'],
+      workingDirectory: modulePath,
+      runInShell: true,
+    );
     if (pubGetProcess.exitCode != 0) {
       stdout.writeln(red(
           '❌  Error running flutter pub get for $modulePath : ${pubGetProcess.stderr}'));
@@ -65,6 +69,7 @@ class ScriptService {
       'flutter',
       packageArgs,
       workingDirectory: modulePath,
+      runInShell: true,
     );
     if (processResult.exitCode == 0) {
       stdout.writeln(green('✅  Packages added to module $moduleName'));
@@ -88,6 +93,7 @@ class ScriptService {
       'sh',
       <String>[scriptPath],
       workingDirectory: directoryPath,
+      runInShell: true,
     );
 
     if (process.exitCode != 0) {
@@ -126,8 +132,11 @@ class ScriptService {
   /// is within the allowed range and false otherwise.
   static Future<bool> isDartVersionInRange(
       String minVersion, String maxVersion) async {
-    final ProcessResult processResult =
-        await Process.run('dart', <String>['--version']);
+    final ProcessResult processResult = await Process.run(
+      'dart',
+      <String>['--version'],
+      runInShell: true,
+    );
     final String versionOutput = processResult.stdout.toString().trim();
     final RegExpMatch? versionMatch =
         RegExp(r'version: ([\d\.]+)').firstMatch(versionOutput);

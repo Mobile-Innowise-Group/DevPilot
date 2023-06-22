@@ -1,3 +1,6 @@
+## 1.0.10
+- Fix Command: flutter clean on windows OS power Shell
+
 ## 1.0.9
 - Fix Error caused by Power Shell in Windows
 
