@@ -1,3 +1,6 @@
+## 1.0.11
+- Increase environment sdk version range
+
 ## 1.0.10
 - Fix Command: flutter clean on windows OS power Shell
 
