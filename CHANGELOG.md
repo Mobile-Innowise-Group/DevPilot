@@ -1,3 +1,6 @@
+## 1.0.12
+- Resolve dependency issues
+
 ## 1.0.11
 - Increase environment sdk version range
 
