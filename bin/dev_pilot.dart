@@ -19,7 +19,7 @@ void main(List<String> arguments) async {
     stdout.write(dcli.red(AppConstants.kLogo));
 
     // Check if the Dart version is in the correct range
-    if (!await ScriptService.isDartVersionInRange('2.19.5', '4.0.0')) {
+    if (!await ScriptService.isDartVersionInRange('3.0.0', '4.0.0')) {
       stdout.writeln(dcli.red(AppConstants.kUpdateDartVersion));
       return;
     }
