@@ -1,3 +1,6 @@
+## 1.0.15
+- Minor bug fixes
+
 ## 1.0.14
 - Resolve dependency issues
 
