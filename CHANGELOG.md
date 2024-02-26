@@ -1,3 +1,9 @@
+## 1.0.15
+- Minor bug fixes
+
+## 1.0.14
+- Resolve dependency issues
+
 ## 1.0.13
 - Resolve Dart 3.1 compatibility 
 
