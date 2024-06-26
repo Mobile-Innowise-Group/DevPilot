@@ -1,83 +1,12 @@
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
-  plugins:
-    - dart_code_metrics
   exclude:
     - "**/*.g.dart"
     - "**/*.gr.dart"
     - "**/*.graphql.dart"
     - "**/*.freezed.dart"
     - "**/generated_plugin_registrant.dart"
-  errors:
-    invalid_annotation_target: ignore
-
-######################################################
-# Dart Code Metric
-######################################################
-
-dart_code_metrics:
-  metrics:
-    cyclomatic-complexity: 20
-    maximum-nesting-level: 5
-    number-of-methods: 10
-    number-of-parameters: 4
-    source-lines-of-code: 50
-    weight-of-class: 0.33
-  rules:
-    - always-remove-listener
-    - avoid-returning-widgets
-    - avoid-unnecessary-setstate
-    - avoid-wrapping-in-padding
-    # - avoid-ignoring-return-values
-    # - avoid-late-keyword
-    - avoid-collection-methods-with-unrelated-types
-    - avoid-global-state
-    # - avoid-dynamic
-    # - avoid-missing-enum-constant-in-map
-    - avoid-nested-conditional-expressions:
-        acceptable-level: 2
-    - avoid-non-null-assertion
-    # - avoid-throw-in-catch-block
-    - avoid-unnecessary-type-assertions
-    - avoid-unnecessary-type-casts
-    - avoid-unused-parameters
-    - avoid-unrelated-type-assertions
-    # - avoid-border-all
-    - avoid-non-null-assertion
-    # - avoid-non-ascii-symbols
-    # - ban-name
-    - binary-expression-operand-order
-    - double-literal-format
-    # - format-comment
-    # - member-ordering-extended
-    # - member-ordering
-    # - newline-before-return
-    - no-boolean-literal-compare
-    # - no-empty-block
-    # - no-equal-arguments
-    - no-equal-then-else
-    - no-magic-number
-    - no-object-declaration
-    - prefer-conditional-expressions
-    # - prefer-commenting-analyzer-ignores
-    # - prefer-correct-identifier-length
-    - prefer-correct-type-name
-    # - prefer-extracting-callbacks
-    - prefer-first
-    - prefer-last
-    - prefer-async-await
-    - prefer-match-file-name
-    - prefer-trailing-comma
-    - prefer-immediate-return
-    - prefer-moving-to-variable
-    - tag-name
-    - prefer-single-widget-per-file:
-        ignore-private-widgets: true
-
-######################################################
-# flutter_lints
-######################################################
 
 linter:
   rules:
@@ -86,7 +15,6 @@ linter:
     avoid_dynamic_calls: false
     avoid_print: true
     avoid_relative_lib_imports: false
-    avoid_returning_null_for_future: true
     avoid_slow_async_io: true
     avoid_type_to_string: false
     avoid_types_as_parameter_names: true
@@ -98,8 +26,6 @@ linter:
     diagnostic_describe_all_properties: false
     empty_statements: false
     hash_and_equals: true
-    iterable_contains_unrelated_type: false
-    list_remove_unrelated_type: trye
     literal_only_boolean_expressions: true
     no_adjacent_strings_in_list: true
     no_duplicate_case_values: true
@@ -117,7 +43,6 @@ linter:
     always_declare_return_types: true
     always_put_control_body_on_new_line: false
     always_put_required_named_parameters_first: false
-    always_require_non_null_named_parameters: true
     always_specify_types: true
     annotate_overrides: true
     avoid_annotating_with_dynamic: false
@@ -140,7 +65,6 @@ linter:
     avoid_redundant_argument_values: true
     avoid_renaming_method_parameters: true
     avoid_return_types_on_setters: true
-    avoid_returning_null: true
     avoid_returning_null_for_void: true
     avoid_returning_this: true
     avoid_setters_without_getters: true
@@ -169,6 +93,7 @@ linter:
     flutter_style_todos: false
     implementation_imports: false
     join_return_with_assignment: true
+    leading_newlines_in_multiline_strings: true
     library_names: true
     library_prefixes: true
     library_private_types_in_public_api: false
@@ -200,7 +125,6 @@ linter:
     prefer_constructors_over_static_methods: true
     prefer_contains: true
     prefer_double_quotes: false
-    prefer_equal_for_default_values: true
     prefer_expression_function_bodies: false
     prefer_final_fields: true
     prefer_final_in_for_each: true
@@ -269,4 +193,4 @@ linter:
     use_string_buffers: true
     use_test_throws_matchers: true
     void_checks: true
-    xzavoid_equals_and_hash_code_on_mutable_classes: true
+    avoid_equals_and_hash_code_on_mutable_classes: true
