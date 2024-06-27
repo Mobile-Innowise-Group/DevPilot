@@ -210,6 +210,12 @@ void main(List<String> arguments) async {
         sourcePath: '$templatesPath/$module',
         destinationPath: modulePath,
       );
+
+      //Remove .gitignore file from the module directory
+      DirectoryService.deleteFile(
+        directoryPath: modulePath,
+        fileName: '.gitignore',
+      );
     }
 
     /// If user specified [packages]
