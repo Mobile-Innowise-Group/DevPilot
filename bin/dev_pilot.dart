@@ -300,6 +300,12 @@ void main(List<String> arguments) async {
       fileName: 'widget_test.dart',
     );
 
+    //Rewrite .gitignore file.
+    await FileService.rewriteFileContent(
+      newString: AppConstants.kGitIgnoreContent,
+      filePath: '$path/$projectName/.gitignore',
+    );
+
     //Clean and pub get ready project
     await ScriptService.flutterClean('$path/$projectName');
     await ScriptService.flutterPubGet('$path/$projectName');
