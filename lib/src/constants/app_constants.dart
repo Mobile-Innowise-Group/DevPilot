@@ -4,7 +4,7 @@ class AppConstants {
   //STRING CONSTANTS
   static const String kEnterProjectName = 'Enter a project name: ';
   static const String kUpdateDartVersion =
-      'Your Dart SDK version is not supported. Please upgrade to a version >=2.19.5 and <3.4.3';
+      'Your Dart SDK version is not supported. Please upgrade to a version >=3.2.3 and <4.0.0';
   static const String kEnterValidProjectName =
       'Please enter a valid project name (full string or snake case string): ';
   static const String kNeedSpecifyPath =
@@ -137,62 +137,6 @@ void main() {
     path: ./data
   navigation:
     path: ./navigation''';
-
-  static const String kGitIgnoreContent = '''
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.buildlog/
-.history
-.svn/
-migrate_working_dir/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.packages
-.pub-cache/
-.pub/
-/build/
-
-# Web related
-
-# Symbolication related
-app.*.symbols
-
-# Obfuscation related
-app.*.map.json
-
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
-
-# Custom
-*.lock
-ios/build
-android/build
-android/app/build
-**/*.g.dart
-**/*.gm.dart
-**/*.graphql.dart
-**/*.gr.dart
-*.env
-
-.vscode''';
 
   static const String kMainCommonContent = '''
 import 'package:core/core.dart';

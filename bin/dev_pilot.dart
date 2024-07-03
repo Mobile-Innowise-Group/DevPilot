@@ -306,10 +306,11 @@ void main(List<String> arguments) async {
       fileName: 'widget_test.dart',
     );
 
-    //Rewrite .gitignore file.
-    await FileService.rewriteFileContent(
-      newString: AppConstants.kGitIgnoreContent,
-      filePath: '$path/$projectName/.gitignore',
+    //Copy .gitignore file from local templates folder to the root of new
+    //Flutter project
+    await DirectoryService.copy(
+      sourcePath: '$templatesPath/${AppConstants.kPrebuild}/.gitignore',
+      destinationPath: '$path/$projectName/.gitignore',
     );
 
     //Clean and pub get ready project

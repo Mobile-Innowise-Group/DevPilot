@@ -1,8 +1,3 @@
-## 1.0.14
-- Resolve Dart 3.4.3 compatibility
-- Update pubspec.yaml
-- Update analysis_options.yaml
-
 ## 1.0.13
 - Resolve Dart 3.1 compatibility 
 
