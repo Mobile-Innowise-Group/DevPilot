@@ -145,6 +145,7 @@ import 'package:flutter/material.dart';
 Future<void> mainCommon(Flavor flavor) async {
   WidgetsFlutterBinding.ensureInitialized();
   _setupDI(flavor);
+  await EasyLocalization.ensureInitialized();
 
   runApp(const App());
 }
@@ -154,6 +155,8 @@ void _setupDI(Flavor flavor) {
     scopeName: unauthScope,
     init: (_) {
       AppDI.initDependencies(flavor);
+      AppDI.setupNavigationDependencies();
+      AppDI.setupDependencies();
     },
   );
 }
