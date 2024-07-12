@@ -104,7 +104,7 @@ void main() {
 
   static const String kSdkFlutter = 'sdk: flutter';
 
-  static const String kAppConfigPath = 'core/lib/config/app_config.dart';
+  static const String kAppConfigPath = 'core/lib/src/config/app_config.dart';
 
   static const String kFlavorEnum = 'enum Flavor {';
 
