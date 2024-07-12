@@ -9,23 +9,18 @@ class AppConstants {
       'Please enter a valid project name (full string or snake case string): ';
   static const String kNeedSpecifyPath =
       'Do you need specify path ? Note if you select "no" project will be created in a current location (Yes/No): ';
-  static const String kEnterPath =
-      'Please specify the path where you want to create the project: ';
-  static const String kInvalidPath =
-      'Invalid path. Please specify a valid path: ';
+  static const String kEnterPath = 'Please specify the path where you want to create the project: ';
+  static const String kInvalidPath = 'Invalid path. Please specify a valid path: ';
   static const String kAddFeature = 'Do you want add features now? (Yes/No): ';
   static const String kYes = 'yes';
   static const String kNo = 'no';
-  static const String kInvalidYesOrNo =
-      'Invalid input. Please enter "yes" or "no": ';
+  static const String kInvalidYesOrNo = 'Invalid input. Please enter "yes" or "no": ';
   static const String kEnterFeatures =
       'Please enter all required feature modules separated by commas : ';
   static const String kInvalidFeatureName =
       'Invalid feature modules input. Please enter full string or snake case strings separated by commas : ';
-  static const String kWillYouUseDio =
-      'Will you use Dio in your project? (yes/no) ';
-  static const String kWillYouUseFlavours =
-      'Will you use flavors in your project? (yes/no) ';
+  static const String kWillYouUseDio = 'Will you use Dio in your project? (yes/no) ';
+  static const String kWillYouUseFlavours = 'Will you use flavors in your project? (yes/no) ';
   static const String kEnterFlavours =
       'Please enter the flavors separated by commas (dev, stage, prod etc...): ';
   static const String kInvalidFlavours =
@@ -59,12 +54,10 @@ class AppConstants {
       'Please enter the feature name for which you want to add packages: ';
   static const String kInvalidFeatureForPackage =
       'Invalid feature name entered. Please try again.\n';
-  static const String kInvalidModuleName =
-      'Invalid module name entered. Please try again.\n';
+  static const String kInvalidModuleName = 'Invalid module name entered. Please try again.\n';
   static const String kAddPackageOtherModule =
       'Do you want to add packages to any other module? (yes/no): ';
-  static const String kInvalidPackage =
-      'Invalid Package input please try again: ';
+  static const String kInvalidPackage = 'Invalid Package input please try again: ';
 
   static const String kCore = 'core';
   static const String kCoreUi = 'core_ui';
@@ -140,7 +133,10 @@ void main() {
 
   static const String kMainCommonContent = '''
 import 'package:core/core.dart';
+import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:navigation/navigation.dart';
 
 Future<void> mainCommon(Flavor flavor) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -153,7 +149,10 @@ void _setupDI(Flavor flavor) {
   appLocator.pushNewScope(
     scopeName: unauthScope,
     init: (_) {
-      AppDI.initDependencies(flavor);
+      AppDI.initDependencies(appLocator, flavor);
+      DataDI.initDependencies(appLocator);
+      DomainDI.initDependencies(appLocator);
+      NavigationDI.initDependencies(appLocator);
     },
   );
 }
