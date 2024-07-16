@@ -130,7 +130,7 @@ Features refers to a group of modules with a similar structure. Each of these mo
 
 ##### Dependency Graph
 Below is the dependency graph of the described modules:
-![Dependency Graph](./dev_pilot_dependency_graph.png)
+<img src="dev_pilot_dependency_graph.png" align="left"/>
 
 ## Plugins
 
