@@ -255,8 +255,8 @@ void main(List<String> arguments) async {
 
     //Copy global error handler
     await DirectoryService.copy(
-      sourcePath: '$templatesPath/${AppConstants.kMain}/${AppConstants.kGlobalErrorHandler}',
-      destinationPath: '$libPath/app_error_handler',
+      sourcePath: '$templatesPath/${AppConstants.kApp}/${AppConstants.kGlobalErrorHandler}',
+      destinationPath: '$libPath/${AppConstants.kGlobalErrorHandler}',
     );
 
     //If user specified flavors above so create new files and add
