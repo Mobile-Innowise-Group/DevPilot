@@ -1,7 +1,5 @@
 # DevPilot
 #### _Command-line interface (CLI) for generating a Flutter project_
-
-
 It prompts the user for input and then creates a Flutter project with the given specifications. The generated project will include a set of predefined modules, such as
 - Core
 - Core UI
@@ -17,7 +15,6 @@ The user can also specify additional
 The code uses the [dcli](https://pub.dev/packages/dcli) and [mason_logger](https://pub.dev/packages/mason_logger) packages for input/output handling and logging, respectively. It also relies on several custom classes (**AppConstants**, **DirectoryService**, **FileService**, **Input**, **ScriptService**, and **Validator**) for various tasks.
 
 ## Getting Started
-
 Activate globally via:
 ```sh
 dart pub global activate dev_pilot
@@ -36,7 +33,6 @@ export PATH="$PATH":"$HOME/.pub-cache/bin"
 ```
 
 ## Generated Project Structure
-
 The created project will consist of the following modules:
 - Core
 - Domain
@@ -47,7 +43,7 @@ The created project will consist of the following modules:
 
 ##### Core
 Core module serves as a common dependency for all other project modules and has two main functions:
-1. Contains elements common to the application (configuration, DI mechanism, application-level constants, localization keys, etc.), various extensions, and utilities.
+1. Contains elements common to the application (configuration, DI mechanism, application-level constants, localization keys, event bus, etc.), various extensions, and utilities.
 2. Exports common or frequently used dependencies (e.g., `flutter_bloc` or `get_it`), eliminating the need to import them in each dependent module.
 ```
 core/
@@ -56,6 +52,7 @@ core/
 │   │   └── network
 │   ├── constants
 │   ├── di
+│   ├── events
 │   ├── localization
 │   ├── logger
 │   ├── services
@@ -85,6 +82,7 @@ Data module implements the interfaces defined in the domain module. It handles d
 - Data providers, designed to interact with data sources and operate with entities
 - Entities, dedicated models for data sources
 - Mappers, converting domain models to entities and vice versa
+- Domain events
 - DI setup for the data layer
 ```
 data/
@@ -108,6 +106,7 @@ Domain module describes the application's subject area, defining domain models a
 domain/
 └── lib/
     ├── di
+    ├── events
     ├── exceptions
     ├── models
     ├── repositories
@@ -131,7 +130,6 @@ Below is the dependency graph of the described modules:
 ![Dependency Graph](./dev_pilot_dependency_graph.png)
 
 ## Plugins
-
 Dillinger is currently extended with the following plugins.
 Instructions on how to use them in your own application are linked below.
 
@@ -143,7 +141,6 @@ Instructions on how to use them in your own application are linked below.
 
 
 ## Demo
-
 A demo gif instructions for correct use  `dev_pilot`
 
 ![demo](./dev_pilot_demo.gif)
