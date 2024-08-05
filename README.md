@@ -52,34 +52,30 @@ Core module serves as a common dependency for all other project modules and has 
 ```
 core/
 ├── lib/
-│   └── src/
-│       ├── config/
-│       │   └── network
-│       ├── constants
-│       ├── di
-│       ├── localization
-│       ├── logger
-│       └── utils
+│   ├── config/
+│   │   └── network
+│   ├── constants
+│   ├── di
+│   ├── localization
+│   ├── logger
+│   └── utils
 └── resources/
     └── lang
 ```
 
-##### Domain
-Domain module describes the application's subject area, defining domain models and possible use cases. It also establishes the necessary interfaces for external dependencies, particularly for the data layer. In this case, the domain module includes the following categories of elements:
-- Domain models
-- Use-cases (atomic domain operations)
-- Repository interfaces
-- Domain exceptions
-- DI setup for the domain layer
+##### Core UI
+Core UI defines common user interface elements for the entire application and includes:
+- Application theme. This encompasses the colors and fonts used in the application, standard dimensions (such as default page padding or default animation duration), and images, icons, and animations
+- Set of reusable widgets aligned with the application’s design, such as styled buttons or text fields
 ```
-domain/
-└── lib/
-    └── src/
-        ├── di
-        ├── exceptions
-        ├── models
-        ├── repositories
-        └── use_cases
+core_ui/
+├── lib/
+│   ├── theme
+│   └── widgets
+└── resources/
+    ├── fonts
+    ├── images
+    └── icons
 ```
 
 ##### Data
@@ -92,41 +88,42 @@ Data module implements the interfaces defined in the domain module. It handles d
 ```
 data/
 └── lib/
-    └── src/
-        ├── di
-        ├── entities
-        ├── errors
-        ├── mappers
-        ├── providers
-        └── repositories
+    ├── di
+    ├── entities
+    ├── errors
+    ├── mappers
+    ├── providers
+    └── repositories
 ```
 
-##### Core UI
-Core UI defines common user interface elements for the entire application and includes:
-- Application theme. This encompasses the colors and fonts used in the application, standard dimensions (such as default page padding or default animation duration), and images, icons, and animations
-- Set of reusable widgets aligned with the application’s design, such as styled buttons or text fields
+##### Domain
+Domain module describes the application's subject area, defining domain models and possible use cases. It also establishes the necessary interfaces for external dependencies, particularly for the data layer. In this case, the domain module includes the following categories of elements:
+- Domain models
+- Use-cases (atomic domain operations)
+- Repository interfaces
+- Domain exceptions
+- DI setup for the domain layer
 ```
-core_ui/
-├── lib/
-│   └── src/
-│       ├── theme
-│       └── widgets
-└── resources/
-    ├── fonts
-    ├── images
-    └── icons
+domain/
+└── lib/
+    ├── di
+    ├── exceptions
+    ├── models
+    ├── repositories
+    └── use_cases
 ```
+
+##### Features
+Features refers to a group of modules with a similar structure. Each of these modules implements a specific feature of the application (e.g., user login or order history). They relate to the presentation layer and perform operations in the domain by invoking the corresponding use cases.
 
 ##### Navigation
 Navigation module contains the application router configuration and provides the necessary DI for navigation.
 ```
 navigation/
-├── app_router
-└── navigation_di
+└── lib/
+    ├── app_router
+    └── di
 ```
-
-##### Features
-Features refers to a group of modules with a similar structure. Each of these modules implements a specific feature of the application (e.g., user login or order history). They relate to the presentation layer and perform operations in the domain by invoking the corresponding use cases.
 
 ##### Dependency Graph
 Below is the dependency graph of the described modules:
