@@ -66,6 +66,7 @@ class AppConstants {
   static const String kFeatures = 'feature';
   static const String kFeature = 'feature';
   static const String kNavigation = 'navigation';
+  static const String kApp = 'app';
 
   static const String kFlutter = 'flutter';
   static const String kCreate = 'create';
@@ -77,6 +78,7 @@ class AppConstants {
   static String kCurrentPath = Directory.current.path;
   static String kTemplates = '$kCurrentPath/lib/src/templates';
   static const String kPrebuild = 'prebuild';
+  static const String kGlobalErrorHandler = 'error_handler';
 
   static const String kFeaturePlug = 'name: plug';
 
@@ -138,6 +140,8 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:navigation/navigation.dart';
 
+import 'error_handler/provider/app_error_handler_provider.dart';
+
 Future<void> mainCommon(Flavor flavor) async {
   WidgetsFlutterBinding.ensureInitialized();
   _setupDI(flavor);
@@ -162,7 +166,9 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const AppErrorHandlerProvider(
+      child: Placeholder(),
+    );
   }
 }
   ''';

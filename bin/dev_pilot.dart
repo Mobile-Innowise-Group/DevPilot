@@ -251,11 +251,19 @@ void main(List<String> arguments) async {
       destinationPath: '$path/$projectName/',
     );
 
+    final String libPath = '$path/$projectName/lib';
+
+    //Copy global error handler
+    await DirectoryService.copy(
+      sourcePath: '$templatesPath/${AppConstants.kApp}/${AppConstants.kGlobalErrorHandler}',
+      destinationPath: '$libPath/${AppConstants.kGlobalErrorHandler}',
+    );
+
     //If user specified flavors above so create new files and add
     // new flavors to enum according specified flavors list
     if (flavors.isNotEmpty) {
-      final String libPath = '$path/$projectName/lib';
       final String appConfigPath = '$path/$projectName/${AppConstants.kAppConfigPath}';
+
       DirectoryService.deleteFile(
         directoryPath: libPath,
         fileName: 'main.dart',
