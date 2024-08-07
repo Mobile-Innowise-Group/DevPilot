@@ -93,10 +93,11 @@ class AppConstants {
   static const String kRemoteTemplatesLink =
       'https://github.com/Mobile-Innowise-Group/DevPilotTemplates';
 
-  static String kFlavourContent(String projectName, String flavor) {
+  static String kFlavourContent(String flavor) {
     return '''
 import 'package:core/core.dart';
-import 'package:$projectName/main_common.dart';
+
+import 'main_common.dart';
 
 void main() {
   mainCommon(Flavor.$flavor);

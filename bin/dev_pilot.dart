@@ -287,7 +287,7 @@ void main(List<String> arguments) async {
         final String fileName = 'main_$flavor.dart';
         final File file = File('$libPath/$fileName');
         file.writeAsStringSync(
-          AppConstants.kFlavourContent(projectName, flavor),
+          AppConstants.kFlavourContent(flavor),
         );
       }
 
@@ -311,6 +311,9 @@ void main(List<String> arguments) async {
     //Clean and pub get ready project
     await ScriptService.flutterClean('$path/$projectName');
     await ScriptService.flutterPubGet('$path/$projectName');
+
+    //Prettify root pubspec.yaml
+    await FileService.prettifyYaml('$path/$projectName/pubspec.yaml');
   } else {
     stdout.writeln(dcli.red('Undefined Command'));
   }
