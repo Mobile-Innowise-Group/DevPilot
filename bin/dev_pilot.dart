@@ -287,13 +287,18 @@ void main(List<String> arguments) async {
         final String fileName = 'main_$flavor.dart';
         final File file = File('$libPath/$fileName');
         file.writeAsStringSync(
-          AppConstants.kFlavourContent(projectName, flavor),
+          AppConstants.kFlavourContent(flavor),
         );
       }
 
       const String fileName = 'main_common.dart';
       final File file = File('$libPath/$fileName');
       file.writeAsStringSync(AppConstants.kMainCommonContent);
+    } else {
+      // Adjust main.dart content to include common setup
+      const String fileName = 'main.dart';
+      final File file = File('$libPath/$fileName');
+      file.writeAsStringSync(AppConstants.kMainFlavorlessContent);
     }
 
     //Delete test file as don't need one for the moment
@@ -311,6 +316,9 @@ void main(List<String> arguments) async {
     //Clean and pub get ready project
     await ScriptService.flutterClean('$path/$projectName');
     await ScriptService.flutterPubGet('$path/$projectName');
+
+    //Prettify root pubspec.yaml
+    await FileService.prettifyYaml('$path/$projectName/pubspec.yaml');
   } else {
     stdout.writeln(dcli.red('Undefined Command'));
   }
