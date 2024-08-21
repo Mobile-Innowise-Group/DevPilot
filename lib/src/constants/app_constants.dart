@@ -134,15 +134,23 @@ void main() {
   navigation:
     path: ./navigation''';
 
-  static const String kMainCommonContent = '''
-import 'package:core/core.dart';
-import 'package:core_ui/core_ui.dart';
-import 'package:data/data.dart';
-import 'package:domain/domain.dart';
-import 'package:flutter/material.dart';
-import 'package:navigation/navigation.dart';
+  static const String kMainFlavorlessContent = '''
+$mainImports
 
-import 'error_handler/provider/app_error_handler_provider.dart';
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  _setupDI(Flavor.dev);
+
+  runApp(const App());
+}
+
+$mainDiSetup
+
+$mainApp
+  ''';
+
+  static const String kMainCommonContent = '''
+$mainImports
 
 Future<void> mainCommon(Flavor flavor) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -151,6 +159,23 @@ Future<void> mainCommon(Flavor flavor) async {
   runApp(const App());
 }
 
+$mainDiSetup
+
+$mainApp
+  ''';
+
+  static const String mainImports = '''
+import 'package:core/core.dart';
+import 'package:core_ui/core_ui.dart';
+import 'package:data/data.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
+import 'package:navigation/navigation.dart';
+
+import 'error_handler/provider/app_error_handler_provider.dart';
+  ''';
+
+  static const String mainDiSetup = '''
 void _setupDI(Flavor flavor) {
   appLocator.pushNewScope(
     scopeName: unauthScope,
@@ -162,7 +187,9 @@ void _setupDI(Flavor flavor) {
     },
   );
 }
+  ''';
 
+  static const String mainApp = '''
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 

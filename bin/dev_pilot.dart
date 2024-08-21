@@ -294,6 +294,11 @@ void main(List<String> arguments) async {
       const String fileName = 'main_common.dart';
       final File file = File('$libPath/$fileName');
       file.writeAsStringSync(AppConstants.kMainCommonContent);
+    } else {
+      // Adjust main.dart content to include common setup
+      const String fileName = 'main.dart';
+      final File file = File('$libPath/$fileName');
+      file.writeAsStringSync(AppConstants.kMainFlavorlessContent);
     }
 
     //Delete test file as don't need one for the moment
