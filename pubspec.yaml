@@ -22,7 +22,7 @@ dependencies:
   logger: ^1.3.0
   args: ^2.4.1
   dcli: ^5.0.0
-  mason_logger: ^0.2.6
+  mason_logger: ^0.2.9
   archive: ^3.3.7
 
 dev_dependencies:

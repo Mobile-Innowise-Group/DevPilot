@@ -63,7 +63,7 @@ class AppConstants {
   static const String kCoreUi = 'core_ui';
   static const String kData = 'data';
   static const String kDomain = 'domain';
-  static const String kFeatures = 'feature';
+  static const String kFeatures = 'features';
   static const String kFeature = 'feature';
   static const String kNavigation = 'navigation';
   static const String kApp = 'app';
@@ -139,6 +139,8 @@ $mainImports
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  
   _setupDI(Flavor.dev);
 
   runApp(const App());
@@ -154,6 +156,8 @@ $mainImports
 
 Future<void> mainCommon(Flavor flavor) async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  
   _setupDI(flavor);
 
   runApp(const App());
