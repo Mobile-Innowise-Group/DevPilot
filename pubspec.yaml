@@ -22,7 +22,7 @@ dependencies:
   logger: ^2.3.0
   args: ^2.5.0
   dcli: ^4.0.2
-  mason_logger: ^0.2.6
+  mason_logger: ^0.2.9
   archive: ^3.6.1
   flutter_lints: ^4.0.0
 

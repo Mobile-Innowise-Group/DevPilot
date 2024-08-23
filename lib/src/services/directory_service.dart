@@ -30,9 +30,10 @@ class DirectoryService {
     required String destinationPath,
     bool isFeature = false,
   }) async {
-    final FileSystemEntity sourceEntity = FileSystemEntity.typeSync(sourcePath) == FileSystemEntityType.file
-        ? File(sourcePath)
-        : Directory(sourcePath);
+    final FileSystemEntity sourceEntity =
+        FileSystemEntity.typeSync(sourcePath) == FileSystemEntityType.file
+            ? File(sourcePath)
+            : Directory(sourcePath);
 
     if (sourceEntity is File) {
       final String destinationDir = Directory(destinationPath).parent.path;
@@ -45,6 +46,7 @@ class DirectoryService {
       sourceEntity.copySync(destinationPath);
       return;
     }
+
     final Directory sourceDirectory = Directory(sourcePath);
     if (!sourceDirectory.existsSync()) {
       stdout.writeln(red(
@@ -61,10 +63,9 @@ class DirectoryService {
       late String newPath;
       if (entity.uri.pathSegments.last.isEmpty) {
         newPath =
-        '${destinationDirectory.path}/${entity.uri.pathSegments[entity.uri.pathSegments.length - 2]}';
+            '${destinationDirectory.path}/${entity.uri.pathSegments[entity.uri.pathSegments.length - 2]}';
       } else {
-        newPath =
-        '${destinationDirectory.path}/${entity.uri.pathSegments.last}';
+        newPath = '${destinationDirectory.path}/${entity.uri.pathSegments.last}';
       }
       if (entity is Directory) {
         final Directory newDirectory = Directory(newPath);
@@ -107,23 +108,44 @@ class DirectoryService {
     }
   }
 
-  static Future<void> cloneRepository(
-      String repoUrl, String destinationPath) async {
+  /// Deletes a directory with the given [path].
+  ///
+  /// If the directory does not exist, this function does nothing.
+  ///
+  static Future<void> deleteDirectory({
+    required String path,
+    bool recursive = false,
+  }) async {
+    final Directory directory = Directory(path);
+
+    if (directory.existsSync()) {
+      await directory.delete(recursive: recursive);
+    }
+  }
+
+  static Future<void> cloneRepository({
+    required String repoUrl,
+    required String destinationPath,
+    String? remoteBranchName,
+  }) async {
+    final List<String> args = <String?>[
+      'clone',
+      repoUrl,
+      remoteBranchName != null ? '--branch' : null,
+      remoteBranchName,
+      destinationPath,
+    ].where((String? item) => item != null).cast<String>().toList();
+
     final ProcessResult processResult = await Process.run(
       'git',
-      <String>[
-        'clone',
-        repoUrl,
-        destinationPath,
-      ],
+      args,
       runInShell: true,
     );
 
     if (processResult.exitCode == 0) {
       stdout.writeln(green('✅  Repository cloned successfully!'));
     } else {
-      stdout.writeln(
-          red('❌  Failed to clone repository: ${processResult.stderr}'));
+      stdout.writeln(red('❌  Failed to clone repository: ${processResult.stderr}'));
     }
   }
 }
