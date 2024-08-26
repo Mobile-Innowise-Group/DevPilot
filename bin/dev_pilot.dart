@@ -253,7 +253,7 @@ void main(List<String> arguments) async {
     //Copy prebuild.sh from local templates folder to the root of new
     //Flutter project
     await DirectoryService.copy(
-      sourcePath: '$templatesPath/${AppConstants.kPrebuild}',
+      sourcePath: '$templatesPath/${AppConstants.kFiles}',
       destinationPath: '$path/$projectName/',
     );
 
@@ -316,7 +316,7 @@ void main(List<String> arguments) async {
     //Copy .gitignore file from local templates folder to the root of new
     //Flutter project
     await DirectoryService.copy(
-      sourcePath: '$templatesPath/${AppConstants.kPrebuild}/.gitignore',
+      sourcePath: '$templatesPath/${AppConstants.kFiles}/.gitignore',
       destinationPath: '$path/$projectName/.gitignore',
     );
 

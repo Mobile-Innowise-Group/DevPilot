@@ -77,7 +77,7 @@ class AppConstants {
 
   static String kCurrentPath = Directory.current.path;
   static String kTemplates = '$kCurrentPath/lib/src/templates';
-  static const String kPrebuild = 'prebuild';
+  static const String kFiles = 'files';
   static const String kGlobalErrorHandler = 'error_handler';
 
   static const String kFeaturePlug = 'name: plug';
