@@ -30,6 +30,23 @@ class DirectoryService {
     required String destinationPath,
     bool isFeature = false,
   }) async {
+    final FileSystemEntity sourceEntity =
+        FileSystemEntity.typeSync(sourcePath) == FileSystemEntityType.file
+            ? File(sourcePath)
+            : Directory(sourcePath);
+
+    if (sourceEntity is File) {
+      final String destinationDir = Directory(destinationPath).parent.path;
+      final Directory destinationDirectory = Directory(destinationDir);
+
+      if (!destinationDirectory.existsSync()) {
+        destinationDirectory.createSync(recursive: true);
+      }
+
+      sourceEntity.copySync(destinationPath);
+      return;
+    }
+
     final Directory sourceDirectory = Directory(sourcePath);
     if (!sourceDirectory.existsSync()) {
       stdout.writeln(red(

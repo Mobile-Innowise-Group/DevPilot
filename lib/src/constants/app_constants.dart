@@ -4,7 +4,7 @@ class AppConstants {
   //STRING CONSTANTS
   static const String kEnterProjectName = 'Enter a project name: ';
   static const String kUpdateDartVersion =
-      'Your Dart SDK version is not supported. Please upgrade to a version >=2.19.5 and <3.1.0';
+      'Your Dart SDK version is not supported. Please upgrade to a version >=3.2.3 and <4.0.0';
   static const String kEnterValidProjectName =
       'Please enter a valid project name (full string or snake case string): ';
   static const String kNeedSpecifyPath =
@@ -77,7 +77,7 @@ class AppConstants {
 
   static String kCurrentPath = Directory.current.path;
   static String kTemplates = '$kCurrentPath/lib/src/templates';
-  static const String kPrebuild = 'prebuild';
+  static const String kFiles = 'files';
   static const String kGlobalErrorHandler = 'error_handler';
 
   static const String kFeaturePlug = 'name: plug';

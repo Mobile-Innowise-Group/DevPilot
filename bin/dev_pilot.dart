@@ -206,6 +206,12 @@ void main(List<String> arguments) async {
         sourcePath: '$templatesPath/$module',
         destinationPath: modulePath,
       );
+
+      //Remove .gitignore file from the module directory
+      DirectoryService.deleteFile(
+        directoryPath: modulePath,
+        fileName: '.gitignore',
+      );
     }
 
     /// If user specified [packages]
@@ -247,7 +253,7 @@ void main(List<String> arguments) async {
     //Copy prebuild.sh from local templates folder to the root of new
     //Flutter project
     await DirectoryService.copy(
-      sourcePath: '$templatesPath/${AppConstants.kPrebuild}',
+      sourcePath: '$templatesPath/${AppConstants.kFiles}',
       destinationPath: '$path/$projectName/',
     );
 
@@ -305,6 +311,13 @@ void main(List<String> arguments) async {
     DirectoryService.deleteFile(
       directoryPath: '$path/$projectName/test',
       fileName: 'widget_test.dart',
+    );
+
+    //Copy .gitignore file from local templates folder to the root of new
+    //Flutter project
+    await DirectoryService.copy(
+      sourcePath: '$templatesPath/${AppConstants.kFiles}/.gitignore',
+      destinationPath: '$path/$projectName/.gitignore',
     );
 
     //Delete templates directory

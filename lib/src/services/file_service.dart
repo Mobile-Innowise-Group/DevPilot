@@ -51,6 +51,19 @@ class FileService {
     return null;
   }
 
+  /// Rewrite the contents of the file at the given [filePath] by replacing
+  /// all occurrences with [newString].
+  ///
+  /// Throws an exception if the file cannot be read or written to.
+  static Future<void> rewriteFileContent({
+    required String newString,
+    required String filePath,
+  }) async {
+    final File file = File(filePath);
+    await file.writeAsString('', flush: true);
+    await file.writeAsString(newString);
+  }
+
   static Future<void> prettifyYaml(String filePath) async {
     final File file = File(filePath);
     final List<String> lines = await file.readAsLines();
