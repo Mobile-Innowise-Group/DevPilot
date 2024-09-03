@@ -14,22 +14,18 @@ platforms:
 environment:
   sdk: '>=3.2.3 <4.0.0'
 
-
-
 dependencies:
-  dio: ^5.4.3+1
+  dio: ^5.6.0
   get_it: ^7.7.0
-  logger: ^2.3.0
+  logger: ^2.4.0
   args: ^2.5.0
-  dcli: ^4.0.2
-  mason_logger: ^0.2.9
+  dcli: ^6.0.5
+  mason_logger: ^0.2.16
   archive: ^3.6.1
-  flutter_lints: ^4.0.0
 
 dev_dependencies:
-  lints: ^4.0.0
-  test: ^1.25.7
+  lints: ^2.0.0
+  test: ^1.24.1
 
 executables:
   dev_pilot:
-
