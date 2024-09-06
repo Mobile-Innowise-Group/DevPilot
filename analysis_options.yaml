@@ -269,4 +269,4 @@ linter:
     use_string_buffers: true
     use_test_throws_matchers: true
     void_checks: true
-    xzavoid_equals_and_hash_code_on_mutable_classes: true
+    avoid_equals_and_hash_code_on_mutable_classes: true

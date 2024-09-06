@@ -85,8 +85,7 @@ void main(List<String> arguments) async {
         errorMessage: AppConstants.kInvalidFeatureName,
         functionValidator: Validator.kIsValidListString,
       );
-      featureModules =
-          featuresInput!.split(',').map((String e) => e.trim()).toList();
+      featureModules = featuresInput!.split(',').map((String e) => e.trim()).toList();
     }
 
     // Ask user if  want to add flavors
@@ -107,10 +106,7 @@ void main(List<String> arguments) async {
         errorMessage: AppConstants.kInvalidFlavours,
         functionValidator: Validator.kIsValidFlavorsInput,
       );
-      flavors = flavorsInput!
-          .split(',')
-          .map((String flavor) => flavor.trim())
-          .toList();
+      flavors = flavorsInput!.split(',').map((String flavor) => flavor.trim()).toList();
     }
 
     //Convert specified features List<Strings>
@@ -184,14 +180,14 @@ void main(List<String> arguments) async {
 
     //Add dependencies to main pubspec.yaml
     await FileService.appendToFile(
-        AppConstants.kSdkFlutter,
-        AppConstants.kMainPubspecDependencies,
-        '$path/$projectName/pubspec.yaml');
+      AppConstants.kSdkFlutter,
+      AppConstants.kMainPubspecDependencies,
+      '$path/$projectName/pubspec.yaml',
+    );
 
     //Clone remote templates repo with folders & files structure
     // to the newly created project directory
-    final String scriptPath =
-        Uri.parse(Platform.script.toString()).toFilePath();
+    final String scriptPath = Uri.parse(Platform.script.toString()).toFilePath();
     final String scriptDirectory = File(scriptPath).parent.absolute.path;
     final String templatesPath = '$scriptDirectory/templates';
 
@@ -199,8 +195,8 @@ void main(List<String> arguments) async {
 
     if (!templatesDirectory.existsSync()) {
       await DirectoryService.cloneRepository(
-        AppConstants.kRemoteTemplatesLink,
-        templatesPath,
+        repoUrl: AppConstants.kRemoteTemplatesLink,
+        destinationPath: templatesPath,
       );
     }
 
@@ -209,6 +205,12 @@ void main(List<String> arguments) async {
       await DirectoryService.copy(
         sourcePath: '$templatesPath/$module',
         destinationPath: modulePath,
+      );
+
+      //Remove .gitignore file from the module directory
+      DirectoryService.deleteFile(
+        directoryPath: modulePath,
+        fileName: '.gitignore',
       );
     }
 
@@ -230,8 +232,7 @@ void main(List<String> arguments) async {
     //Copy feature folder & pubspec.yaml
     // from local templates folder to a given path
     for (final String feature in featureModules) {
-      final String featureDestination =
-          '$path/$projectName/${AppConstants.kFeatures}/$feature';
+      final String featureDestination = '$path/$projectName/${AppConstants.kFeatures}/$feature';
       await DirectoryService.copy(
         sourcePath: '$templatesPath/${AppConstants.kFeature}',
         destinationPath: featureDestination,
@@ -252,16 +253,23 @@ void main(List<String> arguments) async {
     //Copy prebuild.sh from local templates folder to the root of new
     //Flutter project
     await DirectoryService.copy(
-      sourcePath: '$templatesPath/${AppConstants.kPrebuild}',
+      sourcePath: '$templatesPath/${AppConstants.kFiles}',
       destinationPath: '$path/$projectName/',
+    );
+
+    final String libPath = '$path/$projectName/lib';
+
+    //Copy global error handler
+    await DirectoryService.copy(
+      sourcePath: '$templatesPath/${AppConstants.kApp}/${AppConstants.kGlobalErrorHandler}',
+      destinationPath: '$libPath/${AppConstants.kGlobalErrorHandler}',
     );
 
     //If user specified flavors above so create new files and add
     // new flavors to enum according specified flavors list
     if (flavors.isNotEmpty) {
-      final String libPath = '$path/$projectName/lib';
-      final String appConfigPath =
-          '$path/$projectName/${AppConstants.kAppConfigPath}';
+      final String appConfigPath = '$path/$projectName/${AppConstants.kAppConfigPath}';
+
       DirectoryService.deleteFile(
         directoryPath: libPath,
         fileName: 'main.dart',
@@ -285,13 +293,18 @@ void main(List<String> arguments) async {
         final String fileName = 'main_$flavor.dart';
         final File file = File('$libPath/$fileName');
         file.writeAsStringSync(
-          AppConstants.kFlavourContent(projectName, flavor),
+          AppConstants.kFlavourContent(flavor),
         );
       }
 
       const String fileName = 'main_common.dart';
       final File file = File('$libPath/$fileName');
       file.writeAsStringSync(AppConstants.kMainCommonContent);
+    } else {
+      // Adjust main.dart content to include common setup
+      const String fileName = 'main.dart';
+      final File file = File('$libPath/$fileName');
+      file.writeAsStringSync(AppConstants.kMainFlavorlessContent);
     }
 
     //Delete test file as don't need one for the moment
@@ -300,9 +313,25 @@ void main(List<String> arguments) async {
       fileName: 'widget_test.dart',
     );
 
+    //Copy .gitignore file from local templates folder to the root of new
+    //Flutter project
+    await DirectoryService.copy(
+      sourcePath: '$templatesPath/${AppConstants.kFiles}/.gitignore',
+      destinationPath: '$path/$projectName/.gitignore',
+    );
+
+    //Delete templates directory
+    await DirectoryService.deleteDirectory(
+      path: templatesPath,
+      recursive: true,
+    );
+
     //Clean and pub get ready project
     await ScriptService.flutterClean('$path/$projectName');
     await ScriptService.flutterPubGet('$path/$projectName');
+
+    //Prettify root pubspec.yaml
+    await FileService.prettifyYaml('$path/$projectName/pubspec.yaml');
   } else {
     stdout.writeln(dcli.red('Undefined Command'));
   }
