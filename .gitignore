@@ -26,7 +26,6 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-pubspec.yaml
 
 # Web related
 
