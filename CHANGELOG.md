@@ -1,3 +1,24 @@
+## 1.1.0
+### Common:
+- Updated dependencies
+- Replaced deprecated members with relevant alternatives
+- Removed various code artifacts
+- Fixed inputs not working on Windows
+- Added new faster pre-build script for macOS
+
+### Codestyle:
+- Unified inner packages structure to follow the same style across the app
+- Adjusted style of export statements inside packages
+- Removed linter warnings
+
+### Architecture:
+- Split global DI setup into several smaller setups for each module
+- Setup application global error handler
+
+### Features:
+- Network observer
+- Application event bus
+
 ## 1.0.13
 - Resolve Dart 3.1 compatibility 
 
