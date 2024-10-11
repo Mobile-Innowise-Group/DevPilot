@@ -256,15 +256,14 @@ void main(List<String> arguments) async {
       await ScriptService.flutterPubGet(featureDestination);
     }
 
-    final String navPath = '$path/$projectName/${AppConstants.kNavigation}';
-
-    final String navigationYamlPath = '$navPath/pubspec.yaml';
-    await FileService.appendFeatureDependenciesToNavigation(
-      yamlFilePath: navigationYamlPath,
-      features: featureModules,
-    );
-
     if (featureModules.isNotEmpty) {
+      final String navPath = '$path/$projectName/${AppConstants.kNavigation}';
+      final String navigationYamlPath = '$navPath/pubspec.yaml';
+      await FileService.appendFeatureDependenciesToNavigation(
+        yamlFilePath: navigationYamlPath,
+        features: featureModules,
+      );
+
       final String appRouterPath = '$navPath/lib/src/app_router/app_router.dart';
       await FileService.appendFeatureDependenciesToAppRouter(
         appRouterFilePath: appRouterPath,
