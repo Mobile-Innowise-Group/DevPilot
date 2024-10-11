@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 
+import '../constants/app_constants.dart';
+import 'converter_service.dart';
+
 /// This class provides functions to update file content, append to files,
 /// and remove trailing commas.
 class FileService {
@@ -115,5 +118,114 @@ class FileService {
     }
 
     return filtered;
+  }
+
+  static Future<void> appendFeatureDependenciesToNavigation({
+    required String yamlFilePath,
+    required List<String> features,
+  }) async {
+    final String sep = Platform.pathSeparator;
+    final File file = File(yamlFilePath);
+
+    final List<String> lines = await file.readAsLines();
+
+    final List<String> imports = features
+        .expand(
+          (String feature) => <String>[
+            '  $feature:',
+            '    path: ..$sep${AppConstants.kFeatures}$sep$feature',
+          ],
+        )
+        .toList();
+
+    final int packageDependenciesIndex = _getRelativeDependenciesEndLine(lines);
+    lines.insertAll(packageDependenciesIndex, imports);
+    final String result = lines.reduce(
+      (String value, String line) => '$value${Platform.lineTerminator}$line',
+    );
+
+    await file.writeAsString(result);
+  }
+
+  static int _getRelativeDependenciesEndLine(List<String> lines) {
+    int lastRelativeDependencyLine = -1;
+
+    for (int i = 0; i < lines.length; i++) {
+      final String line = lines[i].trim();
+      if (line.startsWith('path:')) {
+        lastRelativeDependencyLine = i + 1;
+      }
+    }
+
+    return lastRelativeDependencyLine;
+  }
+
+  static Future<void> appendFeatureDependenciesToAppRouter({
+    required String appRouterFilePath,
+    required List<String> features,
+  }) async {
+    final String sep = Platform.pathSeparator;
+    final File file = File(appRouterFilePath);
+
+    final List<String> lines = await file.readAsLines();
+
+    final List<String> imports = <String>[
+      ...lines.where((String line) => line.contains("import 'package:")),
+      ...features.map((String feature) => "import 'package:$feature$sep$feature.dart';"),
+    ];
+
+    imports.sort();
+    lines.removeWhere((String line) => line.contains("import 'package:"));
+
+    final int routesIndex = lines.indexOf('  List<AutoRoute> get routes => <AutoRoute>[];');
+
+    final List<String> routes = features.map(
+      (String feature) {
+        final String pascalName = ConverterService.snakeToPascalCase(feature);
+        return '        ...${pascalName}Router().routes,';
+      },
+    ).toList();
+
+    final List<String> appended = <String>[
+      ...imports,
+      ...lines.sublist(0, routesIndex),
+      '  List<AutoRoute> get routes => <AutoRoute>[',
+      ...routes,
+      '      ];',
+      ...lines.sublist(routesIndex + 1),
+    ];
+
+    final String result = appended.reduce(
+      (String value, String line) => '$value${Platform.lineTerminator}$line',
+    );
+
+    await file.writeAsString(result);
+  }
+
+  static Future<void> appendFeatureExportsToNavigation({
+    required String libraryFilePath,
+    required List<String> features,
+  }) async {
+    final String sep = Platform.pathSeparator;
+    final File file = File(libraryFilePath);
+
+    final List<String> lines = await file.readAsLines();
+
+    final List<String> exports = <String>[
+      ...lines.where((String line) => line.contains("export 'package:")),
+      ...features.map((String feature) => "export 'package:$feature$sep$feature.dart';"),
+    ];
+
+    final int exportsIndex = lines.indexWhere((String line) => line.contains("export 'package:"));
+
+    exports.sort();
+    lines.removeWhere((String line) => line.contains("export 'package:"));
+    lines.insertAll(exportsIndex, exports);
+
+    final String result = lines.reduce(
+      (String value, String line) => '$value${Platform.lineTerminator}$line',
+    );
+
+    await file.writeAsString(result);
   }
 }

@@ -193,6 +193,24 @@ void _setupDI(Flavor flavor) {
 }
   ''';
 
+  static const String featureFileContentPlugSnakeCase = '&';
+
+  static const String featureFileContentPlugPascalCase = '^';
+
+  static const String featureFileContentTemplate = '''
+library $featureFileContentPlugSnakeCase;
+
+import 'package:navigation/navigation.dart';
+
+export '$featureFileContentPlugSnakeCase.gr.dart';
+
+@AutoRouterConfig()
+class ${featureFileContentPlugPascalCase}Router extends RootStackRouter {
+  @override
+  List<AutoRoute> get routes => <AutoRoute>[];
+}
+''';
+
   static const String mainApp = '''
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);

@@ -239,6 +239,11 @@ void main(List<String> arguments) async {
         isFeature: true,
       );
 
+      await DirectoryService.fillFeatureContent(
+        featurePackagePath: featureDestination,
+        featureName: feature,
+      );
+
       if (packages[feature] != null) {
         await ScriptService.addPackagesToModules(
           feature,
@@ -246,8 +251,30 @@ void main(List<String> arguments) async {
           '$path/$projectName/${AppConstants.kFeatures}',
         );
       }
+
       await ScriptService.flutterClean(featureDestination);
       await ScriptService.flutterPubGet(featureDestination);
+    }
+
+    if (featureModules.isNotEmpty) {
+      final String navPath = '$path/$projectName/${AppConstants.kNavigation}';
+      final String navigationYamlPath = '$navPath/pubspec.yaml';
+      await FileService.appendFeatureDependenciesToNavigation(
+        yamlFilePath: navigationYamlPath,
+        features: featureModules,
+      );
+
+      final String appRouterPath = '$navPath/lib/src/app_router/app_router.dart';
+      await FileService.appendFeatureDependenciesToAppRouter(
+        appRouterFilePath: appRouterPath,
+        features: featureModules,
+      );
+
+      final String navigationLibraryPath = '$navPath/lib/${AppConstants.kNavigation}.dart';
+      await FileService.appendFeatureExportsToNavigation(
+        libraryFilePath: navigationLibraryPath,
+        features: featureModules,
+      );
     }
 
     //Copy prebuild.sh from local templates folder to the root of new
