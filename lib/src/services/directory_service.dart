@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dcli/dcli.dart';
 
 import '../constants/app_constants.dart';
+import 'converter_service.dart';
 import 'file_service.dart';
 
 /// This class provides functions to copy directories and delete files.
@@ -147,5 +148,36 @@ class DirectoryService {
     } else {
       stdout.writeln(red('❌  Failed to clone repository: ${processResult.stderr}'));
     }
+  }
+
+  static Future<void> fillFeatureContent({
+    required String featurePackagePath,
+    required String featureName,
+  }) async {
+    final String sep = Platform.pathSeparator;
+
+    final String libPath = '$featurePackagePath${sep}lib';
+    final String srcPath = '$libPath${sep}src';
+    final String modulePath = '$libPath$sep$featureName.dart';
+
+    await Directory(srcPath).create(recursive: true);
+    await File(modulePath).create();
+
+    final String pascalFeatureName = ConverterService.snakeToPascalCase(featureName);
+
+    final String content = AppConstants.featureFileContentTemplate
+        .replaceAll(
+          AppConstants.featureFileContentPlugSnakeCase,
+          featureName,
+        )
+        .replaceAll(
+          AppConstants.featureFileContentPlugPascalCase,
+          pascalFeatureName,
+        );
+
+    await FileService.rewriteFileContent(
+      newString: content,
+      filePath: modulePath,
+    );
   }
 }
