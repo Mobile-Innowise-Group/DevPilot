@@ -232,7 +232,8 @@ class App extends StatelessWidget {
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,
               locale: context.locale,
-              theme: lightTheme,
+              theme: AppThemes.light,
+              darkTheme: AppThemes.dark,
             ),
           );
         },
