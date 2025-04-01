@@ -158,7 +158,7 @@ Future<void> mainCommon(Flavor flavor) async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   
-  _setupDI(flavor);
+  await _setupDI(flavor);
 
   runApp(const App());
 }
