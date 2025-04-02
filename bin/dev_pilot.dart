@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart' as dcli;
 import 'package:dev_pilot/src/constants/app_constants.dart';
+import 'package:dev_pilot/src/services/converter_service.dart';
 import 'package:dev_pilot/src/services/directory_service.dart';
 import 'package:dev_pilot/src/services/file_service.dart';
 import 'package:dev_pilot/src/services/input_service.dart';
@@ -65,6 +66,7 @@ void main(List<String> arguments) async {
         stdoutMessage: AppConstants.kEnterPath,
         errorMessage: AppConstants.kInvalidPath,
         functionValidator: Validator.kIsValidPath,
+        postProcessor: ConverterService.standardizeFilePath,
       );
     }
 
@@ -281,7 +283,7 @@ void main(List<String> arguments) async {
     //Flutter project
     await DirectoryService.copy(
       sourcePath: '$templatesPath/${AppConstants.kFiles}',
-      destinationPath: '$path/$projectName/',
+      destinationPath: '$path/$projectName',
     );
 
     final String libPath = '$path/$projectName/lib';

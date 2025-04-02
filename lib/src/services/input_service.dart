@@ -22,16 +22,21 @@ class InputService {
     String? stdoutMessage,
     String? errorMessage,
     bool? Function(String? message)? functionValidator,
+    String Function(String message)? postProcessor,
   }) {
     stdout.write(stdoutMessage);
-    String? message = FileService.removeTrailingComma(
-        stdin.readLineSync()?.trim().toLowerCase());
+    String? message = FileService.removeTrailingComma(stdin.readLineSync()?.trim().toLowerCase());
     while (!(functionValidator?.call(message) ?? true)) {
       if (errorMessage != null) {
         stdout.write(red('❌  $errorMessage'));
       }
       message = stdin.readLineSync()?.trim();
     }
+
+    if (postProcessor != null && message != null) {
+      return postProcessor(message);
+    }
+
     return message;
   }
 }
