@@ -116,8 +116,8 @@ void main() {
   static String kFlavorCase(String flavor) {
     return '''
     case Flavor.$flavor:
-        baseUrl = '';
-        webSocketUrl = '';
+        httpBaseUrl = '';
+        webSocketBaseUrl = '';
         break;
     ''';
   }
@@ -158,7 +158,7 @@ Future<void> mainCommon(Flavor flavor) async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   
-  _setupDI(flavor);
+  await _setupDI(flavor);
 
   runApp(const App());
 }
@@ -180,7 +180,7 @@ import 'error_handler/provider/app_error_handler_provider.dart';
   ''';
 
   static const String mainDiSetup = '''
-void _setupDI(Flavor flavor) {
+Future<void> _setupDI(Flavor flavor) async {
   appLocator.pushNewScope(
     scopeName: unauthScope,
     init: (_) {
@@ -190,6 +190,8 @@ void _setupDI(Flavor flavor) {
       NavigationDI.initDependencies(appLocator);
     },
   );
+  
+  await appLocator.allReady();
 }
   ''';
 
