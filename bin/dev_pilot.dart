@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart' as dcli;
 import 'package:dev_pilot/src/constants/app_constants.dart';
+import 'package:dev_pilot/src/enums/addon.dart';
 import 'package:dev_pilot/src/services/converter_service.dart';
 import 'package:dev_pilot/src/services/directory_service.dart';
 import 'package:dev_pilot/src/services/file_service.dart';
@@ -33,6 +34,7 @@ void main(List<String> arguments) async {
     List<String> featureModules = <String>[];
     List<String> flavors = <String>[];
     bool isPackagesNeeded = false;
+    List<Addon> addons = <Addon>[];
     final List<String> packageModules = <String>[];
     final Map<String, List<String>> packages = <String, List<String>>{};
 
@@ -159,6 +161,22 @@ void main(List<String> arguments) async {
       if (addMorePackages?.toLowerCase() == AppConstants.kNo) {
         isPackagesNeeded = false;
       }
+    }
+
+    final String doIncludeAddonsAnswer = logger.chooseOne(
+      AppConstants.kWillYouUseAddons,
+      choices: <String>[
+        AppConstants.kYes,
+        AppConstants.kNo,
+      ],
+    );
+
+    if (doIncludeAddonsAnswer == AppConstants.kYes) {
+      addons = logger.chooseAny(
+        AppConstants.kSpecifyAddons,
+        choices: Addon.values,
+        display: (Addon addon) => addon.displayName,
+      );
     }
 
     //Create project with a given name
@@ -348,6 +366,20 @@ void main(List<String> arguments) async {
       sourcePath: '$templatesPath/${AppConstants.kFiles}/.gitignore',
       destinationPath: '$path/$projectName/.gitignore',
     );
+
+    //Include specified addons
+    final String rootProjectPath = '$path/$projectName';
+    final String rootProjectAbsolutePath = Directory(rootProjectPath).absolute.path;
+    final List<String> rootProjectPathArgs = <String>[rootProjectAbsolutePath];
+
+    for (final Addon addon in addons) {
+      final String workingDirectory = '$templatesPath/${AppConstants.kAddons}/${addon.remoteName}';
+      await ScriptService.runScript(
+        AppConstants.kAddonScriptName,
+        workingDirectory,
+        rootProjectPathArgs,
+      );
+    }
 
     //Delete templates directory
     await DirectoryService.deleteDirectory(
