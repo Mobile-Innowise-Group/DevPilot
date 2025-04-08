@@ -146,7 +146,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   
-  _setupDI(Flavor.dev);
+  await _setupDI(Flavor.dev);
 
   runApp(const App());
 }
@@ -188,9 +188,9 @@ import 'error_handler/provider/app_error_handler_provider.dart';
 Future<void> _setupDI(Flavor flavor) async {
   appLocator.pushNewScope(
     scopeName: unauthScope,
-    init: (_) {
+    init: (_) async {
       AppDI.initDependencies(appLocator, flavor);
-      DataDI.initDependencies(appLocator);
+      await DataDI.initDependencies(appLocator);
       DomainDI.initDependencies(appLocator);
       NavigationDI.initDependencies(appLocator);
     },
