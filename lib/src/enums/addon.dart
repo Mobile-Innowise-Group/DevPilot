@@ -6,6 +6,10 @@ enum Addon {
   apiProvider(
     remoteName: 'api_provider',
     displayName: 'HTTP provider',
+  ),
+  websocketProvider(
+    remoteName: 'websocket_provider',
+    displayName: 'Websocket provider',
   );
 
   final String remoteName;
