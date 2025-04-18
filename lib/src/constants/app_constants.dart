@@ -25,6 +25,9 @@ class AppConstants {
       'Please enter the flavors separated by commas (dev, stage, prod etc...): ';
   static const String kInvalidFlavours =
       'Invalid input. Please enter only full strings separated by commas : ';
+  static const String kWillYouUseAddons =
+      'Do you want to include any addons (network provider, shared prefs setup, etc.) to this project?';
+  static const String kSpecifyAddons = 'Please specify addons you would like to include';
 
   static String kAddPackages(String modulesString) {
     return 'Do you want to add any packages to any of the following modules (core, core_ui, data, domain, navigation, features ${modulesString.isEmpty ? '' : <String>[
@@ -67,6 +70,8 @@ class AppConstants {
   static const String kFeature = 'feature';
   static const String kNavigation = 'navigation';
   static const String kApp = 'app';
+  static const String kFiles = 'files';
+  static const String kAddons = 'addons';
 
   static const String kFlutter = 'flutter';
   static const String kCreate = 'create';
@@ -74,10 +79,10 @@ class AppConstants {
   static const String kOrg = '--org';
   static const String kComExample = 'com.example';
   static const String kProjectName = '--project-name';
+  static const String kAddonScriptName = 'script.sh';
 
   static String kCurrentPath = Directory.current.path;
   static String kTemplates = '$kCurrentPath/lib/src/templates';
-  static const String kFiles = 'files';
   static const String kGlobalErrorHandler = 'error_handler';
 
   static const String kFeaturePlug = 'name: plug';
@@ -141,7 +146,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   
-  _setupDI(Flavor.dev);
+  await _setupDI(Flavor.dev);
 
   runApp(const App());
 }
@@ -183,9 +188,9 @@ import 'error_handler/provider/app_error_handler_provider.dart';
 Future<void> _setupDI(Flavor flavor) async {
   appLocator.pushNewScope(
     scopeName: unauthScope,
-    init: (_) {
+    init: (_) async {
       AppDI.initDependencies(appLocator, flavor);
-      DataDI.initDependencies(appLocator);
+      await DataDI.initDependencies(appLocator);
       DomainDI.initDependencies(appLocator);
       NavigationDI.initDependencies(appLocator);
     },
