@@ -10,6 +10,10 @@ enum Addon {
   websocketProvider(
     remoteName: 'websocket_provider',
     displayName: 'Websocket provider',
+  ),
+  driftDatabase(
+    remoteName: 'drift_database',
+    displayName: 'Drift database',
   );
 
   final String remoteName;
